@@ -1,61 +1,31 @@
 <!--- NOTE: This is a template for your project README. Edit the content according to the comments provided.--->
 
-# <application_license_badge>
-<!--- [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) --->
+# License
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) 
 
-# <application_name>
-<!--- Description of the application. ---> 
+# DevHub Templates
+This repository contains templates that are used by DevHub, the BC government developer portal. DevHub is based on [Backstage](https://backstage.io), an open source toolkit for build developer portals, which was initiated by Spotify, and is now a CNCF project.
 
-## Technical Details
-<!--- Technology Stack Used. ---> 
+The templates contained in this repository are compatible with the [Backstage "Templates" core feature](https://backstage.io/docs/features/software-templates/).
 
-## Third-Party Products/Libraries used and the licenses they are covered by
-<!--- product/library and path to the LICENSE --->
-<!--- Example: <library_name> - [![GitHub](<shield_icon_link>)](<path_to_library_LICENSE>) --->
 
 ## Project Status
 - [x] Development
-- [ ] Production/Maintenance
-
-## Documentation
-<!--- Point to another readme or create a GitHub Pages (https://guides.github.com/features/pages/) --->
-
-## Security
-<!--- Authentication, Authorization, Policies, etc --->
-
-## Files in this repository
-<!--- Use Tree to generate the file structure, try `tree -I '<excluded_paths>' -d -L 3`--->
-
-## Getting Started
-<!--- setup env vars, secrets, instructions... --->
-
-## Deployment (Local Development)
-* Developer Workstation Requirements/Setup:
-<!--- instruction on Minishift/Docker/Other services.. --->
-
-* Application Specific Setup:
-<!--- instruction on setup local environment and dependencies.. --->
 
 
-## Deployment (OpenShift)
-<!--- Best to include details in a openshift/README.md --->
-
-## Getting Help or Reporting an Issue
-<!--- Example below, modify accordingly --->
-To report bugs/issues/feature requests, please file an [issue](../../issues).
+## Getting Help, Reporting an Issue, or Providing Feedback
+To report bugs/issues/feature requests, please file an [issue](../../issues) or contact the [Developer Experience Team](mailto:developer.experience@gov.bc.ca).
 
 
 ## How to Contribute
-<!--- Example below, modify accordingly --->
-If you would like to contribute, please see our [CONTRIBUTING](./CONTRIBUTING.md) guidelines.
+We are developing a model for accepting contributions, but we invite you to review our draft [CONTRIBUTING](./CONTRIBUTING.md) guidelines in the meantime and provide feedback.
 
 Please note that this project is released with a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). 
 By participating in this project you agree to abide by its terms.
 
 
 ## License
-<!--- Example below, modify accordingly --->
-    Copyright 2018 Province of British Columbia
+    Copyright 2023 Province of British Columbia
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
