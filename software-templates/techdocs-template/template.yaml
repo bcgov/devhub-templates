@@ -45,8 +45,11 @@ spec:
           type: string
           ui:field: RepoUrlPicker
           ui:options:
-            allowedHosts:
-              - github.com
+              # Here's the option you can pass to the RepoUrlPicker
+              requestUserCredentials:
+                  secretsKey: USER_OAUTH_TOKEN
+              allowedHosts:
+                  - github.com
 
   # This template is meant to be used on top of an existing template.
   # By adding the following and fetching from an absolute URL you can
@@ -70,6 +73,7 @@ spec:
         allowedHosts: ["github.com"]
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
+        token: ${{ secrets.USER_OAUTH_TOKEN }}
 
     - id: register
       name: Register
