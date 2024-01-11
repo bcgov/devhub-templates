@@ -55,7 +55,7 @@ spec:
   # By adding the following and fetching from an absolute URL you can
   # add in the docs template
   steps:
-    - id: fetch
+    - id: fetch-base
       name: Template Docs Skeleton
       action: fetch:template
       input:
@@ -66,14 +66,26 @@ spec:
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
 
+    -   id: fetch-action
+        name: Template Docs GitHub Action
+        action: fetch:plain
+        input:
+            url: ../../shared/.github
+            targetPath: ./github
+
     - id: publish
       name: Publish
       action: publish:github
       input:
         allowedHosts: ["github.com"]
+        allowedOrganizations:
+            - bcgov
         description: This is ${{ parameters.name }}
         repoUrl: ${{ parameters.repoUrl }}
         token: ${{ secrets.USER_OAUTH_TOKEN }}
+        defaultBranch: "main"
+        gitAuthorName: ${{ user.entity.metadata.name }}
+        gitAuthorEmail: ${{ user.entity.spec.profile.email }}
 
     - id: register
       name: Register
