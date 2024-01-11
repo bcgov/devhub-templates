@@ -48,6 +48,9 @@ spec:
                         # Here's the option you can pass to the RepoUrlPicker
                         requestUserCredentials:
                             secretsKey: USER_OAUTH_TOKEN
+                            additionalScopes:
+                                github:
+                                    - workflow:write
                         allowedHosts:
                             - github.com
                         allowedOrganizations:
