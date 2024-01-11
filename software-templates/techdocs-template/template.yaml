@@ -2,18 +2,18 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
     name: docs-template
-    title: Documentation Template
-    description: Create a new standalone documentation project
+    title: DevHub Technical Documentation Template
+    description: Create a new repository for technical documentation
     tags:
         - recommended
         - techdocs
         - mkdocs
 spec:
-    owner: backstage/techdocs-core
+    owner: "developer-experience"
     type: documentation
 
     parameters:
-        -   title: Fill in some steps
+        -   title: Gather information about new repository
             required:
                 - name
                 - description
@@ -21,17 +21,17 @@ spec:
                 name:
                     title: Name
                     type: string
-                    description: Unique name of the component
+                    description: A unique name for the documentation
                     ui:field: EntityNamePicker
                     ui:autofocus: true
                 description:
                     title: Description
                     type: string
-                    description: A description for the component
+                    description: A description for the documentation
                 owner:
                     title: Owner
                     type: string
-                    description: Owner of the component
+                    description: Team that will own the documentation
                     ui:field: OwnerPicker
                     ui:options:
                         allowedKinds:
@@ -76,7 +76,7 @@ spec:
             action: fetch:plain
             input:
                 url: ../../shared/.github
-                targetPath: ./github
+                targetPath: ./.github
 
         -   id: publish
             name: Publish
