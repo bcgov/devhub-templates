@@ -11,9 +11,25 @@ metadata:
 spec:
     owner: "developer-experience"
     type: documentation
-
     parameters:
-        -   title: Gather information about new repository
+        -   title: Provide information about your product (or service/component)
+            program_area:
+                title: Program area
+                type: string
+                description: Name of the program area associated with the product
+            acronym:
+                title: Product acronym
+                type: string
+                description: An acronym used to identity the product, if there is one
+            product_owner:
+                title: Product owner
+                type: string
+                description: Name of the individual in the Product Owner role for the product
+            hosting_platform:
+                title: Hosting platform
+                type: string
+                description: Name of the technical platform where the product is hosted
+        -   title: Provide information about your product's documentation
             required:
                 - name
                 - description
@@ -31,12 +47,12 @@ spec:
                 owner:
                     title: Owner
                     type: string
-                    description: Team that will own the documentation
+                    description: Team that owns the documentation
                     ui:field: OwnerPicker
                     ui:options:
                         allowedKinds:
                             - Group
-        -   title: Choose a location
+        -   title: Specify repository details
             required:
                 - repoUrl
             properties:
