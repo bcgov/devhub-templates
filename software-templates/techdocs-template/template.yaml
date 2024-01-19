@@ -13,22 +13,23 @@ spec:
     type: documentation
     parameters:
         -   title: Provide information about your product (or service/component)
-            program_area:
-                title: Program area
-                type: string
-                description: Name of the program area associated with the product
-            acronym:
-                title: Product acronym
-                type: string
-                description: An acronym used to identity the product, if there is one
-            product_owner:
-                title: Product owner
-                type: string
-                description: Name of the individual in the Product Owner role for the product
-            hosting_platform:
-                title: Hosting platform
-                type: string
-                description: Name of the technical platform where the product is hosted
+            properties:
+                program_area:
+                    title: Program area
+                    type: string
+                    description: Name of the program area associated with the product
+                acronym:
+                    title: Product acronym
+                    type: string
+                    description: An acronym used to identity the product, if there is one
+                product_owner:
+                    title: Product owner
+                    type: string
+                    description: Name of the individual in the Product Owner role for the product
+                hosting_platform:
+                    title: Hosting platform
+                    type: string
+                    description: Name of the technical platform where the product is hosted
         -   title: Provide information about your product's documentation
             required:
                 - name
