@@ -5,9 +5,10 @@ metadata:
     title: DevHub Technical Documentation Template
     description: Create a new repository for technical documentation
     tags:
-        - recommended
         - techdocs
-        - mkdocs
+        - markdown
+        - developer-experience
+        - core
 spec:
     owner: "developer-experience"
     type: documentation
@@ -18,7 +19,11 @@ spec:
                     title: Program area
                     type: string
                     description: Name of the program area associated with the product
-                acronym:
+                product_name:
+                    title: Product acronym
+                    type: string
+                    description: An acronym used to identity the product, if there is one
+                product_acronym:
                     title: Product acronym
                     type: string
                     description: An acronym used to identity the product, if there is one
@@ -51,7 +56,8 @@ spec:
                     description: Team that owns the documentation
                     ui:field: OwnerPicker
                     ui:options:
-                        allowedKinds:
+                        allowArbitraryValues: false
+                        catalogFilter:
                             - Group
         -   title: Specify repository details
             required:
@@ -62,8 +68,7 @@ spec:
                     type: string
                     ui:field: RepoUrlPicker
                     ui:options:
-                        # Here's the option you can pass to the RepoUrlPicker
-                        requestUserCredentials:
+                        requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
                             secretsKey: USER_OAUTH_TOKEN
                             additionalScopes:
                                 github:
@@ -72,10 +77,6 @@ spec:
                             - github.com
                         allowedOrganizations:
                             - bcgov
-
-    # This template is meant to be used on top of an existing template.
-    # By adding the following and fetching from an absolute URL you can
-    # add in the docs template
     steps:
         -   id: fetch-base
             name: Template Docs Skeleton
@@ -87,14 +88,12 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
-
         -   id: fetch-action
             name: Template Docs GitHub Action
             action: fetch:plain
             input:
                 url: ../../shared/.github
                 targetPath: ./.github
-
         -   id: publish
             name: Publish
             action: publish:github
@@ -102,18 +101,21 @@ spec:
                 allowedHosts: [ "github.com" ]
                 description: This is ${{ parameters.name }}
                 repoUrl: ${{ parameters.repoUrl }}
-                token: ${{ secrets.USER_OAUTH_TOKEN }}
+                token: ${{ secrets.USER_OAUTH_TOKEN }} # this cause the GitHub publish to be performed as the logged in user and reduces the required permissions of the app itself.
+                repoVisibility: "public"
                 defaultBranch: "main"
+                gitCommitMessage: "DevHub creating new repository for TechDocs. Created by ."
                 gitAuthorName: ${{ user.entity.metadata.name }}
                 gitAuthorEmail: ${{ user.entity.spec.profile.email }}
-
+                hasProjects: false
+                hasWiki: false
+                topics: ["techdocs", "devhub"]
         -   id: register
             name: Register
             action: catalog:register
             input:
                 repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
                 catalogInfoPath: "/catalog-info.yaml"
-
     output:
         links:
             -   title: Repository

@@ -9,4 +9,4 @@ metadata:
 spec:
   type: documentation
   lifecycle: experimental
-  owner: ${{values.owner | dump}}
+  owner: ${{values.owner | dump | default(values.owner, "developer-experience", true) }}
