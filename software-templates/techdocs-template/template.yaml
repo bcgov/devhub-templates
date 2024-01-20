@@ -20,9 +20,9 @@ spec:
                     type: string
                     description: Name of the program area associated with the product
                 product_name:
-                    title: Product acronym
+                    title: Product name
                     type: string
-                    description: An acronym used to identity the product, if there is one
+                    description: The name of the product
                 product_acronym:
                     title: Product acronym
                     type: string
@@ -57,7 +57,7 @@ spec:
                     ui:field: OwnerPicker
                     ui:options:
                         allowArbitraryValues: false
-                        catalogFilter:
+                        allowedKinds:
                             - Group
         -   title: Specify repository details
             required:
