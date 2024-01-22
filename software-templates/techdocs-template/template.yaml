@@ -157,6 +157,12 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
+                    ministry: ${{ parameters.ministry }}
+                    program_area: ${{ parameters.program_area }}
+                    product_name: ${{ parameters.product_name }}
+                    product_acronym: ${{ parameters.product_acronym }}
+                    product_owner: ${{ parameters.product_owner }}
+                    hosting_platform: ${{ parameters.hosting_platform }}
         -   id: fetch-action
             name: Template Docs GitHub Action
             action: fetch:plain
@@ -173,9 +179,9 @@ spec:
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this cause the GitHub publish to be performed as the logged in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
-                gitCommitMessage: "DevHub creating new repository for TechDocs. Created by ."
-                gitAuthorName: ${{ user.entity.metadata.name }}
-                gitAuthorEmail: ${{ user.entity.spec.profile.email }}
+                gitCommitMessage: "DevHub creating new repository for TechDocs."
+                gitAuthorName: ${{ user.entity.metadata.name }} # this likely won't populate properly we do some additional work on sign in to improve the default behaviour.
+                gitAuthorEmail: ${{ user.entity.spec.profile.email }} # this likely won't work  populate properly until we do some additional work on sign in to improve the default behaviour.
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
