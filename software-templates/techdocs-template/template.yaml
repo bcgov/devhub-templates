@@ -148,7 +148,7 @@ spec:
                             - bcgov
     steps:
         -   id: fetch-base
-            name: Template Docs Skeleton
+            name: Add files from skeleton and apply user-provided values.
             action: fetch:template
             input:
                 url: ./skeleton
@@ -163,11 +163,28 @@ spec:
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
                     hosting_platform: ${{ parameters.hosting_platform }}
+        -   id: create-catalog-file
+            name: Create catalog file.
+            action: catalog:write
+            input:
+                entity:
+                    apiVersion: backstage.io/v1alpha1
+                    kind: Component
+                    metadata:
+                        name: ${{values.name | dump}}
+                        description: ${{values.description | dump}}
+                        annotations:
+                            github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
+                            backstage.io/techdocs-ref: dir:.
+                    spec:
+                        type: documentation
+                        lifecycle: experimental
+                        owner: ${{values.owner | dump | default(values.owner, "developer-experience", true) }}
         -   id: fetch-action
-            name: Template Docs GitHub Action
+            name: Add GitHub Actions workflow files.
             action: fetch:plain
             input:
-                url: ../../shared/.github
+                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
                 targetPath: ./.github
         -   id: publish
             name: Publish
@@ -185,16 +202,7 @@ spec:
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
-        -   id: register
-            name: Register
-            action: catalog:register
-            input:
-                repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-                catalogInfoPath: "/catalog-info.yaml"
     output:
         links:
             -   title: Repository
                 url: ${{ steps.publish.output.remoteUrl }}
-            -   title: Open in catalog
-                icon: catalog
-                entityRef: ${{ steps.register.output.entityRef }}
