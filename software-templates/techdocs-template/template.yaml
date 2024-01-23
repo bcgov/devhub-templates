@@ -171,15 +171,15 @@ spec:
                     apiVersion: backstage.io/v1alpha1
                     kind: Component
                     metadata:
-                        name: ${{parameters.name | dump}}
-                        description: ${{parameters.description | dump}}
+                        name: ${{ parameters.name }}
+                        description: ${{parameters.description }}
                         annotations:
                             github.com/project-slug: ${{ parameters.repoUrl }}
                             backstage.io/techdocs-ref: dir:.
                     spec:
                         type: documentation
                         lifecycle: experimental
-                        owner: ${{values.owner | dump | default(values.owner, "developer-experience", true) }}
+                        owner: ${{ default(parameters.owner, "developer-experience", true) }}
         -   id: fetch-action
             name: Add GitHub Actions workflow files.
             action: fetch:plain
