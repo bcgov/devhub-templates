@@ -185,6 +185,17 @@ spec:
             input:
                 repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
                 catalogInfoPath: "/catalog-info.yaml"
+        -   id: pubcode
+            name: Template Pubcode
+            action: fetch:template
+            input:
+                url: ../..shared/pubcode
+                targetPath: ./
+                values:
+                    name: ${{ parameters.name }}
+                    description: ${{ parameters.description }}
+                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
+                    owner: ${{ parameters.owner }}
     output:
         links:
             -   title: Repository
