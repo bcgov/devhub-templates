@@ -113,6 +113,7 @@ spec:
                     title: Name
                     type: string
                     description: A unique name for the documentation
+                    default: ${{ parameters.product_name | lower }}
                     ui:field: EntityNamePicker
                     ui:autofocus: true
                 description:
@@ -174,7 +175,7 @@ spec:
                         name: ${{ parameters.name }}
                         description: ${{parameters.description }}
                         annotations:
-                            github.com/project-slug: ${{ parameters.repoUrl }}
+                            github.com/project-slug: ${{ parameters.repoUrl | projectSlug }}
                             backstage.io/techdocs-ref: dir:.
                     spec:
                         type: documentation
@@ -206,3 +207,14 @@ spec:
         links:
             -   title: Repository
                 url: ${{ steps.publish.output.remoteUrl }}
+        text:
+            -   title: Congratulations and next steps...
+                content: |
+                    **Congratulations, you made a new repo!**
+
+                    ## Here are the things you need to do now:
+
+                    * step one
+                    * step two
+                    * last step
+
