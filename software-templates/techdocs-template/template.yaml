@@ -135,6 +135,7 @@ spec:
                 repoUrl:
                     title: Repository Location
                     type: string
+                    ui:widget: hidden
                     ui:field: RepoUrlPicker
                     ui:options:
                         requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
@@ -171,10 +172,10 @@ spec:
                     apiVersion: backstage.io/v1alpha1
                     kind: Component
                     metadata:
-                        name: ${{values.name | dump}}
-                        description: ${{values.description | dump}}
+                        name: ${{parameters.name | dump}}
+                        description: ${{parameters.description | dump}}
                         annotations:
-                            github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
+                            github.com/project-slug: ${{ parameters.repoUrl }}
                             backstage.io/techdocs-ref: dir:.
                     spec:
                         type: documentation
@@ -193,7 +194,7 @@ spec:
                 allowedHosts: [ "github.com" ]
                 description: This is ${{ parameters.name }}
                 repoUrl: ${{ parameters.repoUrl }}
-                token: ${{ secrets.USER_OAUTH_TOKEN }} # this cause the GitHub publish to be performed as the logged in user and reduces the required permissions of the app itself.
+                token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
                 gitCommitMessage: "DevHub creating new repository for TechDocs."
