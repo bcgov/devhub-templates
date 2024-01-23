@@ -144,11 +144,11 @@ spec:
                                     - workflow
                         allowedHosts:
                             - github.com
-                        allowedOrganizations:
+                        allowedOwners:
                             - bcgov
     steps:
         -   id: fetch-base
-            name: Template Docs Skeleton
+            name: Add files from skeleton and apply user-provided values.
             action: fetch:template
             input:
                 url: ./skeleton
@@ -157,11 +157,34 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
+                    ministry: ${{ parameters.ministry }}
+                    program_area: ${{ parameters.program_area }}
+                    product_name: ${{ parameters.product_name }}
+                    product_acronym: ${{ parameters.product_acronym }}
+                    product_owner: ${{ parameters.product_owner }}
+                    hosting_platform: ${{ parameters.hosting_platform }}
+        -   id: create-catalog-file
+            name: Create catalog file.
+            action: catalog:write
+            input:
+                entity:
+                    apiVersion: backstage.io/v1alpha1
+                    kind: Component
+                    metadata:
+                        name: ${{ parameters.name }}
+                        description: ${{parameters.description }}
+                        annotations:
+                            github.com/project-slug: ${{ parameters.repoUrl | projectSlug }}
+                            backstage.io/techdocs-ref: dir:.
+                    spec:
+                        type: documentation
+                        lifecycle: experimental
+                        owner: ${{ default(parameters.owner, "developer-experience", true) }}
         -   id: fetch-action
-            name: Template Docs GitHub Action
+            name: Add GitHub Actions workflow files.
             action: fetch:plain
             input:
-                url: ../../shared/.github
+                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
                 targetPath: ./.github
         -   id: publish
             name: Publish
@@ -170,21 +193,15 @@ spec:
                 allowedHosts: [ "github.com" ]
                 description: This is ${{ parameters.name }}
                 repoUrl: ${{ parameters.repoUrl }}
-                token: ${{ secrets.USER_OAUTH_TOKEN }} # this cause the GitHub publish to be performed as the logged in user and reduces the required permissions of the app itself.
+                token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
-                gitCommitMessage: "DevHub creating new repository for TechDocs. Created by ."
-                gitAuthorName: ${{ user.entity.metadata.name }}
-                gitAuthorEmail: ${{ user.entity.spec.profile.email }}
+                gitCommitMessage: "DevHub creating new repository for TechDocs."
+                gitAuthorName: ${{ user.entity.metadata.name }} # this likely won't populate properly we do some additional work on sign in to improve the default behaviour.
+                gitAuthorEmail: ${{ user.entity.spec.profile.email }} # this likely won't work  populate properly until we do some additional work on sign in to improve the default behaviour.
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
-        -   id: register
-            name: Register
-            action: catalog:register
-            input:
-                repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-                catalogInfoPath: "/catalog-info.yaml"
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template
@@ -200,6 +217,14 @@ spec:
         links:
             -   title: Repository
                 url: ${{ steps.publish.output.remoteUrl }}
-            -   title: Open in catalog
-                icon: catalog
-                entityRef: ${{ steps.register.output.entityRef }}
+        text:
+            -   title: Congratulations and next steps...
+                content: |
+                    **Congratulations, you made a new repo!**
+
+                    ## Here are the things you need to do now:
+
+                    * step one
+                    * step two
+                    * last step
+
