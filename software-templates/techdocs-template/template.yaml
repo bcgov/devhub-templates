@@ -135,7 +135,6 @@ spec:
                 repoUrl:
                     title: Repository Location
                     type: string
-                    ui:widget: hidden
                     ui:field: RepoUrlPicker
                     ui:options:
                         requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
@@ -145,7 +144,7 @@ spec:
                                     - workflow
                         allowedHosts:
                             - github.com
-                        allowedOrganizations:
+                        allowedOwners:
                             - bcgov
     steps:
         -   id: fetch-base
