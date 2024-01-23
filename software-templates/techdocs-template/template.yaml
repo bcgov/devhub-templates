@@ -113,7 +113,6 @@ spec:
                     title: Name
                     type: string
                     description: A unique name for the documentation
-                    default: ${{ parameters.product_name | lower }}
                     ui:field: EntityNamePicker
                     ui:autofocus: true
                 description:
