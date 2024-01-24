@@ -1,5 +1,5 @@
-site_name: "changeme"
-site_description: "changeme"
+site_name: "${{ values.title }}"
+site_description: "${{ values.descriptions }}"
 docs_dir: "docs"
 plugins:
     - techdocs-core
