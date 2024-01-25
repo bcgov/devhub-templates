@@ -205,7 +205,6 @@ spec:
                     name: ${{ parameters.name }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     program_area: ${{ parameters.program_area }}
                     product_name: ${{ parameters.product_name }}
