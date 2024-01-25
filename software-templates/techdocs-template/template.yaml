@@ -199,8 +199,7 @@ spec:
             name: Template Pubcode
             action: fetch:template
             input:
-                url: ../..shared/pubcode
-                targetPath: ./pubcode
+                url: ../../shared/pubcode
                 values:
                     name: ${{ parameters.name }}
                     description: ${{ parameters.description }}
