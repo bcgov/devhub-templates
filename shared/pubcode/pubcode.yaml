@@ -1,0 +1,15 @@
+version: 1
+data_management_roles:
+  product_owner: ${{ values.product_owner }}
+product_information:
+  ministry:
+    - ${{ values.ministry }}
+  product_acronym: ${{ values.product_acronym  }}
+  product_description: ${{ values.description }}
+  product_name: ${{ values.name }}
+  product_status: active
+  product_urls:
+    - ${{ values.destination }}
+  program_area: ${{ values.program_area }}
+  hosting_platforms:
+    - ${{ values.hosting_platform }}

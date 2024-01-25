@@ -186,6 +186,23 @@ spec:
             input:
                 url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
                 targetPath: ./.github
+        -   id: pubcode
+            name: Template Pubcode
+            action: fetch:template
+            input:
+                url: ../..shared/pubcode
+                targetPath: ./
+                values:
+                    name: ${{ parameters.name }}
+                    description: ${{ parameters.description }}
+                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
+                    owner: ${{ parameters.owner }}
+                    ministry: ${{ parameters.ministry }}
+                    program_area: ${{ parameters.program_area }}
+                    product_name: ${{ parameters.product_name }}
+                    product_acronym: ${{ parameters.product_acronym }}
+                    product_owner: ${{ parameters.product_owner }}
+                    hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
             action: publish:github
@@ -202,17 +219,6 @@ spec:
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
-        -   id: pubcode
-            name: Template Pubcode
-            action: fetch:template
-            input:
-                url: ../..shared/pubcode
-                targetPath: ./
-                values:
-                    name: ${{ parameters.name }}
-                    description: ${{ parameters.description }}
-                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    owner: ${{ parameters.owner }}
     output:
         links:
             -   title: Repository
