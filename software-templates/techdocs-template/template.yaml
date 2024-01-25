@@ -13,6 +13,29 @@ spec:
     owner: "developer-experience"
     type: documentation
     parameters:
+        -   title: Provide information about your documentation
+            required:
+                - title
+                - description
+            properties:
+                title:
+                    title: Title
+                    type: string
+                    description: A title for your documentation. For example, "Whizzbang Service Developer's Guide".
+                    ui:autofocus: true
+                description:
+                    title: Description
+                    type: string
+                    description: A description for your documentation
+                owner:
+                    title: Owner
+                    type: string
+                    description: The team in GitHub that is developing the documentation, if there is one.
+                    ui:field: OwnerPicker
+                    ui:options:
+                        allowArbitraryValues: false
+                        allowedKinds:
+                            - Group
         -   title: Provide information about your product (or service/component)
             properties:
                 ministry:
@@ -96,6 +119,8 @@ spec:
                         - On-Premise-Virtual
                         - Private-Cloud-Openshift
                         - Other
+                        - Unknown
+                        - Not-Applicable
                     enumNames:
                         - 'Amazon Web Service'
                         - 'Google Cloud Platform'
@@ -103,37 +128,15 @@ spec:
                         - 'On-premise virtual infrastructure'
                         - 'On-premise physical infrastructure'
                         - 'OpenShift private cloud'
-                        - 'Other'
-        -   title: Provide information about your product's documentation
-            required:
-                - name
-                - description
-            properties:
-                name:
-                    title: Name
-                    type: string
-                    description: A unique name for the documentation
-                    ui:field: EntityNamePicker
-                    ui:autofocus: true
-                description:
-                    title: Description
-                    type: string
-                    description: A description for the documentation
-                owner:
-                    title: Owner
-                    type: string
-                    description: Team that owns the documentation
-                    ui:field: OwnerPicker
-                    ui:options:
-                        allowArbitraryValues: false
-                        allowedKinds:
-                            - Group
+                        - "Other platform that isn't listed"
+                        - "Not sure"
+                        - "Not applicable"
         -   title: Specify repository details
             required:
                 - repoUrl
             properties:
                 repoUrl:
-                    title: Repository Location
+                    title: Name of the repository that we will create to store your documentation
                     type: string
                     ui:field: RepoUrlPicker
                     ui:options:
@@ -153,7 +156,8 @@ spec:
             input:
                 url: ./skeleton
                 values:
-                    name: ${{ parameters.name }}
+                    name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+                    title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
@@ -162,7 +166,6 @@ spec:
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
-                    hosting_platform: ${{ parameters.hosting_platform }}
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
@@ -171,11 +174,17 @@ spec:
                     apiVersion: backstage.io/v1alpha1
                     kind: Component
                     metadata:
-                        name: ${{ parameters.name }}
+                        name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+                        title: ${{ parameters.title }}
                         description: ${{parameters.description }}
                         annotations:
                             github.com/project-slug: ${{ parameters.repoUrl | projectSlug }}
                             backstage.io/techdocs-ref: dir:.
+                            bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
+                            bcgovpubcode.gov.bc.ca/program_area: ${{ parameters.program_area }}
+                            bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
+                            bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
+                            bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
                     spec:
                         type: documentation
                         lifecycle: experimental

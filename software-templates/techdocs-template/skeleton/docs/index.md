@@ -1,4 +1,4 @@
-## ${{ values.name }}
+## ${{ values.title }}
 
 ${{ values.description }}
 
