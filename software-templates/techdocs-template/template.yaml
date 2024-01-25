@@ -200,7 +200,7 @@ spec:
             action: fetch:template
             input:
                 url: ../..shared/pubcode
-                targetPath: ./
+                targetPath: ./pubcode
                 values:
                     name: ${{ parameters.name }}
                     description: ${{ parameters.description }}
