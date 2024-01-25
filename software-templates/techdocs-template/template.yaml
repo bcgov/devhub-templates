@@ -106,11 +106,10 @@ spec:
                     title: Product owner
                     type: string
                     description: Name of the individual in the Product Owner role for the product
-                product_url:
-                    title: Product url
+                product_data_custodian:
+                    title: Data custodian
                     type: string
-                    description: Url at which your product can be reached
-                    default: 'https://example.gov.bc.ca'
+                    description: Name of the individual in the Data Custodian role for the product
                 hosting_platform:
                     title: Hosting platform
                     type: string
@@ -214,7 +213,7 @@ spec:
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
-                    product_urls: ${{ parameters.product_url }}
+                    product_data_custodian: ${{ parameters.product_data_custodian }}
                     hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish

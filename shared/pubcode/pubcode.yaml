@@ -1,12 +1,12 @@
 version: 1
 data_management_roles:
   product_owner: ${{ values.product_owner }}
+  data_custodian: ${{ values.product_data_custodian }}
 product_information:
   ministry: ${{ values.ministry }}
   product_acronym: ${{ values.product_acronym  }}
   product_description: ${{ values.description }}
   product_name: ${{ values.product_name}}
-  product_urls: ${{ values.product_url }}
   program_area: ${{ values.program_area }}
 product_technology_information:
   hosting_platforms: ${{ values.hosting_platform }}
