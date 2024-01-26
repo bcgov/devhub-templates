@@ -32,7 +32,7 @@ List the steps to installs your project. For example:
    git clone https://${{values.destination.host}}/${{values.destination.owner}}/${{values.destination.repo}}.git
    ```
 1. Create a `config.local.yaml` file
-1. Enter `env` as `local` in the `config.local.yaml` file
+1. Set the `env` variable to `local` in the `config.local.yaml` file
    ```yaml
    env: local
    ```
