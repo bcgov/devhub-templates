@@ -105,11 +105,7 @@ spec:
                 product_owner:
                     title: Product owner
                     type: string
-                    description: Name of the individual in the Product Owner role for the product
-                product_data_custodian:
-                    title: Data custodian
-                    type: string
-                    description: Name of the individual in the Data Custodian role for the product
+                    description: Name of the individual in the Product Owner role for the product            
                 hosting_platform:
                     title: Hosting platform
                     type: string
