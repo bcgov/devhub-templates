@@ -106,6 +106,10 @@ spec:
                     title: Product owner
                     type: string
                     description: Name of the individual in the Product Owner role for the product            
+                product_owner_email:
+                    title: Product owner email
+                    type: string
+                    description: Email address of the individual in the Product Owner role for the product
                 hosting_platform:
                     title: Hosting platform
                     type: string
@@ -166,6 +170,7 @@ spec:
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
+                    product_owner_email: ${{ parameters.product_owner_email }}
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
