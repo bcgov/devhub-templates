@@ -1,6 +1,5 @@
 version: 1
 data_management_roles:
-  data_custodian: ${{ values.product_data_custodian }}
   product_owner: ${{ values.product_owner }}
 product_information:
   ministry: ${{ values.ministry }}
