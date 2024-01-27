@@ -201,7 +201,7 @@ spec:
             input:
                 url: ../../shared/pubcode
                 values:
-                    name: ${{ parameters.name }}
+                    name: ${{ parameters.product_name }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     ministry: ${{ parameters.ministry }}
@@ -209,7 +209,6 @@ spec:
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
-                    product_data_custodian: ${{ parameters.product_data_custodian }}
                     hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
