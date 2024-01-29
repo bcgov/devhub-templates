@@ -1,5 +1,5 @@
 site_name: "${{ values.title }}"
-site_description: "${{ values.descriptions }}"
+site_description: "${{ values.description }}"
 docs_dir: "docs"
 plugins:
     - techdocs-core
