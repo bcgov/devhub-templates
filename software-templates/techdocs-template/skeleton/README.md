@@ -15,6 +15,7 @@ Refer to the [index.md](docs/index.md) file for instructions on how to add docum
 ## Setup
 
 Replace this section with instructions to set up your project locally. 
+
 ### Prerequisites
 
 Use this section to list any prerequisites needed to install your project. Example:
@@ -42,7 +43,7 @@ List the steps to installs your project. For example:
 Use this section to describe how to use your project. Example:
 
 ```sh
-yarn start
+npm start
 ```
 
 ## Getting Help or Reporting an Issue
@@ -57,7 +58,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## License
 
-Copyright 2023 Province of British Columbia
+Copyright 2024 Province of British Columbia
 
 Refer to the [LICENSE](LICENSE.md) file for more information.
 
