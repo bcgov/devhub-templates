@@ -56,7 +56,7 @@ markdown_extensions:
             location: patcher.py
 ```
 
-### flat `nav`
+### Flat `nav`
 
 Below is another example of a `mkdocs.yml` file. It does not use categories to arrange the documentation pages.
 
