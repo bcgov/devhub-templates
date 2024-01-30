@@ -16,7 +16,7 @@ The homepage of your documentation is in the [docs/index.md](docs/index.md) file
 
 Add documentation pages by  adding more markdown (.md) files to the [docs](docs) folder.
 
-## Table of Contents
+## Table of contents
 
 The Table of Contents on the right is generated based on the hierarchy
 of headings. Only use one H1 (`#` in Markdown) per file.
@@ -30,9 +30,7 @@ If there is no `nav` section in [mkdocs.yml](mkdocs.yml), a navigation section
 will be created for you. However, you will not be able to use alternate titles for
 pages, or include links to other sites.
 
-### Site navigation examples
-
-#### `nav` with categories
+### `nav` with categories
 
 Below is an example of a `mkdocs.yml` file with a `nav` section. This `nav` section is structure to arrange the files in categories. In this case the categories are `Getting Started` and `Usage`.
 
@@ -58,7 +56,7 @@ markdown_extensions:
             location: patcher.py
 ```
 
-#### flat `nav`
+### flat `nav`
 
 Below is another example of a `mkdocs.yml` file. It does not use categories to arrange the documentation pages.
 
@@ -101,7 +99,7 @@ The [.github/workflows/publish.yaml](.github/workflows/publish.yaml) file publis
 You may edit the [.github/workflows/publish.yaml](.github/workflows/publish.yaml) file to use a workflow that works for your project.
 
 
-## Getting Help or Reporting an Issue
+## Getting help or reporting an issue
 
 To report bugs/issues/features requests, please email the Developer Experience team at [Developer.Experience@gov.bc.ca](mailto:Developer.Experience@gov.bc.ca)
 
