@@ -105,7 +105,7 @@ spec:
                 product_owner:
                     title: Product owner
                     type: string
-                    description: Name of the individual in the Product Owner role for the product            
+                    description: Name of the individual in the Product Owner role for the product
                 product_owner_email:
                     title: Product owner email
                     type: string
@@ -238,11 +238,13 @@ spec:
         text:
             -   title: Congratulations and next steps...
                 content: |
-                    **Congratulations, you made a new repo!**
+                    **Congratulations, you've made a new GitHub repository for your technical documentation!**
 
-                    ## Here are the things you need to do now:
+                    ## Here are the next steps you can take to get your documentation published in DevHub:
 
-                    * step one
-                    * step two
-                    * last step
+                    * check out the contents of [your new repo](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
+                    * check out [our Content Partner Guide](https://mvp.developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
+                    * add your additional pages to the repository
+
+                    When you'd like to have your documentation published in DevHub, [contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) and we'll work with you to set things up. Note that we have a "preview" environment and a production environment, and you'll be in control of how and when your content is published to each.
 

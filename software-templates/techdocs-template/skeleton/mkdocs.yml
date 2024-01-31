@@ -1,6 +1,7 @@
 site_name: "${{ values.title }}"
 site_description: "${{ values.description }}"
 docs_dir: "docs"
+edit_uri: edit/main/docs/
 plugins:
     - techdocs-core
     - ezlinks
