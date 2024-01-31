@@ -193,7 +193,7 @@ spec:
                     spec:
                         type: documentation
                         lifecycle: experimental
-                        owner: ${{ default(parameters.owner, "developer-experience", true) }}
+                        owner: ${{ parameters.owner | default("developer-experience", true) }}
         -   id: fetch-action
             name: Add GitHub Actions workflow files.
             action: fetch:plain
