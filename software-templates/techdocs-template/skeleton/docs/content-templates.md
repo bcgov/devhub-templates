@@ -1,7 +1,5 @@
-<!-- This is a work in progress not ready for publishing 
-
-Guide written by Pilar Solares Velasco  -->
-# Content template creation 
+<!-- Created by Pilar Solares Velasco for DevHub  -->
+# Guide to creating content and templates 
 Use this guide to help you create a strong framework for content creation. Discover valuable resources to lead the development of technical documents in your team's dedicated library in the B.C. government DevHub.
 
 Whether you're enhancing existing content or embarking on new projects, this guide equips you with the essential references and a template to ensure effective communication and compelling documentation.
