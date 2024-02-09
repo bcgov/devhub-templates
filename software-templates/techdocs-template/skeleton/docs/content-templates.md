@@ -2,9 +2,11 @@
 
 Guide written by Pilar Solares Velasco  -->
 # Content template creation 
-Explore this  guide to empower your team in crafting a robust framework for content creation while discovering valuable resources to lead the development of technical documents in your dedicated library in the B.C. government DevHub
+Use this guide to help you create a strong framework for content creation. Discover valuable resources to lead the development of technical documents in your team's dedicated library in the B.C. government DevHub.
 
 Whether you're enhancing existing content or embarking on new projects, this guide equips you with the essential references and a template to ensure effective communication and compelling documentation.
+
+The content on this page is based on B.C. government resources for web content writing.
 
 ## Document template
 Use this document template to create a consistent format for both existing and new pages in your team's documentation library.
@@ -50,21 +52,24 @@ If you have made any edits, no matter how small, use 'Last updated'.
 
 
 ### Table of contents
-The system will automatically generate a table of contents or also known as "on this page" based on the type of headings you use.  Refer to the B.C. goverment's webstyle guide on the use of [writing headings and page titles](https://www2.gov.bc.ca/gov/content/governments/services-for-government/service-experience-digital-delivery/web-content-development-guides/web-style-guide/writing-guide/headings)
+The system will automatically generate a table of contents or also known as "on this page" based on the type of headings you use.  Refer to the B.C. goverment's webstyle guide on the use of [writing headings and page titles](https://www2.gov.bc.ca/gov/content/governments/services-for-government/service-experience-digital-delivery/web-content-development-guides/web-style-guide/writing-guide/headings).
 
 Example for heading's format: 
 
-# Heading level 1 - H1  
-Every page will contain one header level 1 which is given to the title of your page.
+`# Heading level 1 - H1`
+<br>Every page will contain one header level 1 which is given to the title of your page.
 
-## Heading level 2 - H2
-These are the main headings on your page and can be used several times.
+`## Heading level 2 - H2`
+<br>These are the main headings on your page and can be used several times.
 
-### Heading level 3 - H3
-These can also be used several times and are sub-headings to H2.
+`### Heading level 3 - H3`
+<br>These can also be used several times and are sub-headings to H2.
 
-#### Heading level 4 -H4 
-And these are sub-sub-headings to H3 but it is suggested would avoid these and beyond this level.
+`#### Heading level 4 - H4 `
+<br>And these are sub-sub-headings to H3, use in small amounts.
+
+`##### Heading level 5 - H5 and above `
+<br> Avoid this level and beyond. 
 
 ### How to introduce your topic
 Briefly explain the purpose and scope of the documentation. 
@@ -86,49 +91,40 @@ If readers require more detailed background information, consider providing link
 The goal of the introduction is to strike a balance between providing essential information and respecting the reader's time and attention.
 
 ### Developing your topic 
-<!-- ## Getting started
-### About us
-* Introduce the team or project.
-### Installation guide
-* Provide step-by-step instructions for setting up the system.
-* List prerequisites and system requirements.
 
-## Core concepts
-### Service definition
-* Clearly define the purpose and functionality of the service.
-### Key features
-* Highlight the main functionalities and advantages.
+As you develop your topic, consider your audience and keep the document's purpose in mind. Here are examples to guide you further:
 
-## User guide
-### How to use
-* Break down usage into clear, actionable steps.
-### Troubleshooting
-* Address common issues and provide solutions.
-### FAQs
-* Compile frequently asked questions and concise answers.
+**About Us**
+* Introduce the team or project for a more in-depth understanding
 
-## Advanced configuration (if applicable)
-### Customization
-* Guide on how to tailor the service to specific needs.
-### Integration
-* Provide instructions for integrating with other systems.
+**Installation guides or user guides**
+* Provide step-by-step instructions for system setup
+* List prerequisites and system requirements
+* Determine if visual aids are necessary for better comprehension, keeping in mind to [create accessible content](https://digital.gov.bc.ca/wcag/home/intro/) and review the [accessibility and inclusion toolkit](https://www2.gov.bc.ca/gov/content/home/accessible-government/toolkit)
+* Address common issues and provide troubleshooting solutions
 
-## Best practices
-### Coding standards
-* If applicable, provide guidelines for coding and contributions.
-### Security guidelines
-* Highlight security best practices.
+**Core concepts**
+* Clearly define the purpose and functionality of the service, project, or application
+* Highlight key features and advantages
+* Emphasize main functionalities
 
-## References
-### Glossary
-* Define technical terms used in the documentation.
-### External resources
-* Provide links to relevant external documentation or tools.
+**Advanced configuration guidelines**
+* Explain customization requirements
+* Guide on tailoring the service to specific needs
+* Provide instructions for integrating with other systems if needed
 
-## Contact information
-* Include contact details for support or further inquiries.
- -->
-## Helpful reference resources
+**Best practices guidelines**
+* Contribute to the overall success of a development project
+* Promote efficiency, code quality, collaboration, security, and adaptability
+* Ensure the knowledge base required aligns with your entire audience; assess if it suits their needs
+
+### Conclusion of your topic
+Conclude your topic by ensuring you provide current contact information for readers seeking help or feedback and ensure you summarize the key points on your topic.  
+
+Lastly, include a list of helpful resources, internal or external, as the **last H2 heading** on your page.
+
+---
+## These are not just references 
 These resources not only help ensure that your documentation aligns with B.C. government standards for content creation but also provide valuable insights for enhancing your overall writing skills.
 
 * [Writing web content](https://www2.gov.bc.ca/gov/content/governments/services-for-government/service-experience-digital-delivery/web-content-development-guides/web-style-guide/writing-guide/writing-web-content)<br>Write plain language content that's accessible and simple to follow
