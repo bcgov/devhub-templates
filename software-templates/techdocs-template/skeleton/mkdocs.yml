@@ -6,7 +6,6 @@ plugins:
     - techdocs-core
     - ezlinks
 markdown_extensions:
-    - markdown_inline_mermaid
     - md_in_html
-    -   mkpatcher:
-            location: patcher.py
+    - mkpatcher:
+          location: patcher.py
