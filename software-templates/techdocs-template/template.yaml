@@ -164,6 +164,7 @@ spec:
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
+                    repo_url: ${{ parameters.repoUrl | projectSlug }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     program_area: ${{ parameters.program_area }}
@@ -190,6 +191,7 @@ spec:
                             bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
                             bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
                             bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
+                            developer.gov.bc.ca/source_template: "default/docs-template"
                     spec:
                         type: documentation
                         lifecycle: experimental
