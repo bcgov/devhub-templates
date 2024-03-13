@@ -230,27 +230,27 @@ spec:
                         type: documentation
                         lifecycle: experimental
                         owner: ${{ parameters.owner | default("developer-experience", true) }}
-        # -   id: fetch-action
-        #     name: Add GitHub Actions workflow files.
-        #     action: fetch:plain
-        #     input:
-        #         url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
-        #         targetPath: ./.github
-        # -   id: pubcode
-        #     name: Template Pubcode
-        #     action: fetch:template
-        #     input:
-        #         url: ../../shared/pubcode
-        #         values:
-        #             name: ${{ parameters.product_name }}
-        #             description: ${{ parameters.description }}
-        #             destination: ${{ parameters.repoUrl | parseRepoUrl }}
-        #             ministry: ${{ parameters.ministry }}
-        #             program_area: ${{ parameters.program_area }}
-        #             product_name: ${{ parameters.product_name }}
-        #             product_acronym: ${{ parameters.product_acronym }}
-        #             product_owner: ${{ parameters.product_owner }}
-        #             hosting_platform: ${{ parameters.hosting_platform }}
+        -   id: fetch-action
+            name: Add GitHub Actions workflow files.
+            action: fetch:plain
+            input:
+                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
+                targetPath: ./.github
+        -   id: pubcode
+            name: Template Pubcode
+            action: fetch:template
+            input:
+                url: ../../shared/pubcode
+                values:
+                    name: ${{ parameters.product_name }}
+                    description: ${{ parameters.description }}
+                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
+                    ministry: ${{ parameters.ministry }}
+                    program_area: ${{ parameters.program_area }}
+                    product_name: ${{ parameters.product_name }}
+                    product_acronym: ${{ parameters.product_acronym }}
+                    product_owner: ${{ parameters.product_owner }}
+                    hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
             if: ${{ parameters.repoExists == false }}
