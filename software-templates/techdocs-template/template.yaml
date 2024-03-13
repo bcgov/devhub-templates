@@ -164,7 +164,7 @@ spec:
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl | projectSlug }}
+                    repo_url: ${{ parameters.repoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     program_area: ${{ parameters.program_area }}
