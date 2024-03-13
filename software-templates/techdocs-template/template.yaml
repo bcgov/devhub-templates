@@ -164,7 +164,7 @@ spec:
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl }}
+                    repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     program_area: ${{ parameters.program_area }}
@@ -223,7 +223,7 @@ spec:
             input:
                 allowedHosts: [ "github.com" ]
                 description: This is ${{ parameters.name }}
-                repoUrl: ${{ parameters.repoUrl | parseRepoUrl }}
+                repoUrl: ${{ parameters.repoUrl }}
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
