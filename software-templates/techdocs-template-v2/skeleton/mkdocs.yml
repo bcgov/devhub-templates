@@ -1,0 +1,13 @@
+site_name: "${{ values.title }}"
+site_description: "${{ values.description }}"
+docs_dir: "${{ values.docs_path }}"
+repo_url: "${{ values.repo_url }}"
+edit_uri: "edit/${{ values.target_branch }}/${{ values.docs_path }}"
+plugins:
+    - techdocs-core
+    - ezlinks
+markdown_extensions:
+    - markdown_inline_mermaid
+    - md_in_html
+    -   mkpatcher:
+            location: patcher.py
