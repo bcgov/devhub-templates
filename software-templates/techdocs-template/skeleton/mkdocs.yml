@@ -8,7 +8,6 @@ plugins:
     - ezlinks
     - git-revision-date-localized
 markdown_extensions:
-    - markdown_inline_mermaid
     - md_in_html
     -   mkpatcher:
             location: patcher.py
