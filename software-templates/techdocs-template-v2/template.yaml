@@ -196,11 +196,11 @@ spec:
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
                     product_owner_email: ${{ parameters.product_owner_email }}
-                    docs_path: ${{ parameters.docsPath if parameters.repoExists == true else 'docs' }}
-                    target_branch: ${{ parameters.targetBranchName if parameters.repoExists == true else 'main' }}
+                    docs_path: ${{ parameters.docsPath if parameters.repoExists === true else 'docs' }}
+                    target_branch: ${{ parameters.targetBranchName if parameters.repoExists === true else 'main' }}
         -   id: rename-files
             name: Rename docs folder to repo subdir if supplied
-            if: ${{ parameters.repoExists == true }}
+            if: ${{ parameters.repoExists === true and (parameters.docsPath !== 'docs' and parameters.docsPath !== 'docs/') }}
             action: fs:rename
             input:
                 files:
@@ -253,7 +253,7 @@ spec:
                     hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
-            if: ${{ parameters.repoExists == false }}
+            if: ${{ parameters.repoExists === false }}
             action: publish:github
             input:
                 allowedHosts: [ "github.com" ]
@@ -270,7 +270,7 @@ spec:
                 topics: [ "techdocs", "devhub" ]
         -   id: publish
             name: Publish
-            if: ${{ parameters.repoExists == true }}
+            if: ${{ parameters.repoExists === true }}
             action: publish:github:pull-request
             input:
                 repoUrl: ${{ parameters.repoUrl }}
@@ -282,16 +282,16 @@ spec:
                 commitMessage: "DevHub creating new files for TechDocs."
     output:
         links:
-            -   title: ${{ 'New Pull Request' if parameters.repoExists == true else 'Repository' }}
+            -   title: ${{ 'New Pull Request' if parameters.repoExists === true else 'Repository' }}
                 url: ${{ steps.publish.output.remoteUrl }}
         text:
             -   title: Congratulations and next steps...
                 content: |
-                    **Congratulations, you've made a new GitHub ${{ 'pull request' if parameters.repoExists == true else 'repository' }} for your technical documentation!**
+                    **Congratulations, you've made a new GitHub ${{ 'pull request' if parameters.repoExists === true else 'repository' }} for your technical documentation!**
 
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
-                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists == true else 'new repo' }}](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
+                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists === true else 'new repo' }}](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
                     * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
                     * add your additional pages to the repository
 
