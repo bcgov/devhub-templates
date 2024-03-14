@@ -253,7 +253,7 @@ spec:
                     hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
-            if: ${{ parameters.repoExists === false }}
+            if: ${{ parameters.repoExists !== true }}
             action: publish:github
             input:
                 allowedHosts: [ "github.com" ]
@@ -280,6 +280,7 @@ spec:
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 targetBranchName: ${{ parameters.targetBranchName }}
                 commitMessage: "DevHub creating new files for TechDocs."
+                update: true
     output:
         links:
             -   title: ${{ 'New Pull Request' if parameters.repoExists === true else 'Repository' }}
@@ -291,7 +292,7 @@ spec:
 
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
-                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists === true else 'new repo' }}](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
+                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists === true else 'new repo' }}](${{ steps.publish.output.remoteUrl }}) ${{ 'especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)' if parameters.repoExists === false }}
                     * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
                     * add your additional pages to the repository
 
