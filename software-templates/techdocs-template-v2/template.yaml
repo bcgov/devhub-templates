@@ -230,12 +230,15 @@ spec:
                         type: documentation
                         lifecycle: experimental
                         owner: ${{ parameters.owner | default("developer-experience", true) }}
-        -   id: fetch-action
-            name: Add GitHub Actions workflow files.
-            action: fetch:plain
-            input:
-                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
-                targetPath: ./.github
+        # -   id: fetch-action
+        #     name: Add GitHub Actions workflow files.
+        #     action: fetch:template
+        #     input:
+        #         url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
+        #         targetPath: ./.github
+        #         values:
+        #             docs_path: ${{ parameters.docsPath if parameters.repoExists === true else 'docs' }}
+        #             target_branch: ${{ parameters.targetBranchName if parameters.repoExists === true else 'main' }}
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template
