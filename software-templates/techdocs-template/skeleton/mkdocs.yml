@@ -1,7 +1,7 @@
 site_name: "${{ values.title }}"
 site_description: "${{ values.description }}"
 docs_dir: "docs"
-repo_url:  "https://${{ values.repo_url.host }}/${{ values.repo_url.organization }}/${{ values.repo_url.repo}}"
+repo_url:  "https://${{ values.repo_url.host }}/${{ values.repo_url.owner }}/${{ values.repo_url.repo}}"
 edit_uri: edit/main/docs/
 nav:
     - Introduction: index.md
