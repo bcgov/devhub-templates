@@ -163,7 +163,7 @@ spec:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
-                    destination: ${{ parameters.repoUrl | parseRepoUrl | join("/") }}
+                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
