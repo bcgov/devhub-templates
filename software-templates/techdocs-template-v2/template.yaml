@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
     name: docs-template-v2
-    title: DevHub Technical Documentation Template
-    description: Create a new repository (or pull request) for technical documentation
+    title: Add existing technical documentation to DevHub
+    description: Add the required files to publish to DevHub
     tags:
         - techdocs
         - markdown
