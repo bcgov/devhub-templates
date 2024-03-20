@@ -102,7 +102,7 @@ DevHub has a "preview" environment and a production environment, and once the De
 The configuration provided in the [workflow file](.github/workflows/publish.yaml) behaves as follows: 
 
 * A pull request to your repo will build and publish the code to the [DevHub preview](https://dev.developer.gov.bc.ca) site. This is a development site where you can preview your changes.
-* A push to the `main` branch in your repository (a direct push or a PR merge) will publish the code to the [production DevHub website](http://mvp.developer.gov.bc.ca).
+* A push to the `main` branch in your repository (a direct push or a PR merge) will publish the code to the [production DevHub website](http://developer.gov.bc.ca).
 
 ## Getting help or reporting an issue
 

@@ -1,13 +1,16 @@
 site_name: "${{ values.title }}"
 site_description: "${{ values.description }}"
 docs_dir: "${{ values.docs_path }}"
-repo_url: "${{ values.repo_url }}"
+repo_url: "https://${{ values.repo_url.host }}/${{ values.repo_url.owner }}/${{ values.repo_url.repo}}"
 edit_uri: edit/${{ values.target_branch }}/${{ values.docs_path }}
+nav:
+    - Introduction: index.md
+    - Getting started: getting-started.md
+    - Configuration: configuration.md
+    - Tips and tricks: tips-and-tricks.md
+    - About us: about-us.md
 plugins:
     - techdocs-core
-    - ezlinks
+    - git-revision-date-localized
 markdown_extensions:
-    - markdown_inline_mermaid
     - md_in_html
-    -   mkpatcher:
-            location: patcher.py
