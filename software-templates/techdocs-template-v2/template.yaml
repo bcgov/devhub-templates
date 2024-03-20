@@ -140,7 +140,7 @@ spec:
                 - repoUrl
             properties:
                 repoUrl:
-                    title: Name of the repository that we will create to store your documentation
+                    title: Specify details for creating a new repository or a pull request to an existing repo
                     type: string
                     ui:field: RepoUrlPicker
                     ui:options:
@@ -177,6 +177,7 @@ spec:
                                         title: Documentation subdirectory
                                         type: string
                                         description: The path to an existing documentation subdirectory. For example, "docs/src".
+                                        default: docs
     steps:
         -   id: fetch-base
             name: Add files from skeleton and apply user-provided values.
@@ -199,7 +200,7 @@ spec:
                     docs_path: ${{ parameters.docsPath if parameters.repoExists === true else 'docs' }}
                     target_branch: ${{ parameters.targetBranchName if parameters.repoExists === true else 'main' }}
         -   id: rename-files
-            name: Rename docs folder to repo subdir if supplied
+            name: Rename docs folder to repo subdir if necessary
             if: ${{ parameters.repoExists === true and (parameters.docsPath !== 'docs' and parameters.docsPath !== 'docs/') }}
             action: fs:rename
             input:
