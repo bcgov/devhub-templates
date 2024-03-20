@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE) 
 
 # DevHub Templates
-This repository contains templates that are used by [DevHub](mvp.developer.gov.bc.ca), the BC government [developer portal](https://github.com/bcgov/developer-portal). DevHub is based on [Backstage](https://backstage.io), an open source toolkit for build developer portals, which was initiated by Spotify, and is now a CNCF project.
+This repository contains templates that are used by [DevHub](developer.gov.bc.ca), the BC government [developer portal](https://github.com/bcgov/developer-portal). DevHub is based on [Backstage](https://backstage.io), an open source toolkit for build developer portals, which was initiated by Spotify, and is now a CNCF project.
 
 The templates contained in this repository are compatible with the [Backstage "Templates" core feature](https://backstage.io/docs/features/software-templates/).
 
