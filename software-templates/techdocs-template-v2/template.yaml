@@ -206,6 +206,14 @@ spec:
                 files:
                     -   from: "docs/index.md"
                         to: "${{ parameters.docsPath }}/index.md"
+                    -   from: "docs/about-us.md"
+                        to: "${{ parameters.docsPath }}/about-us.md"
+                    -   from: "docs/configuration.md"
+                        to: "${{ parameters.docsPath }}/configuration.md"
+                    -   from: "docs/getting-started.md"
+                        to: "${{ parameters.docsPath }}/getting-started.md"
+                    -   from: "docs/tips-and-tricks.md"
+                        to: "${{ parameters.docsPath }}/tips-and-tricks.md"
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
