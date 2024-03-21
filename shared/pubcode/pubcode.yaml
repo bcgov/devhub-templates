@@ -6,6 +6,5 @@ product_information:
   product_acronym: ${{ values.product_acronym  }}
   product_description: ${{ values.description }}
   product_name: ${{ values.product_name}}
-  program_area: ${{ values.program_area }}
 product_technology_information:
   hosting_platforms: ${{ values.hosting_platform }}
