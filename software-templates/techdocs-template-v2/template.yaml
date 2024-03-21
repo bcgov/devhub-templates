@@ -176,6 +176,7 @@ spec:
                                     docsPath:
                                         title: Documentation subdirectory
                                         type: string
+                                        pattern: '^(?!\/.*$).*'
                                         description: The path to an existing documentation subdirectory. For example, "docs/src".
                                         default: docs
     steps:
