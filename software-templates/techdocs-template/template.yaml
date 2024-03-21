@@ -160,7 +160,7 @@ spec:
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl | projectSlug }}
+                    repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     product_name: ${{ parameters.product_name }}
@@ -238,7 +238,7 @@ spec:
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
                     * check out the contents of [your new repo](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
-                    * check out [our Content Partner Guide](https://mvp.developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
+                    * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
                     * add your additional pages to the repository
 
                     When you'd like to have your documentation published in DevHub, [contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) and we'll work with you to set things up. Note that we have a "preview" environment and a production environment, and you'll be in control of how and when your content is published to each.

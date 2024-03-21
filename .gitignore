@@ -36,4 +36,9 @@
 ehthumbs.db
 Thumbs.db
 
-patcher.py
+# IDES #
+########
+.vscode
+
+
+
