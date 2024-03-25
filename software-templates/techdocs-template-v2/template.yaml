@@ -309,7 +309,7 @@ spec:
     output:
         links:
             -   title: ${{ 'New Pull Request' if parameters.repoExists === true else 'Repository' }}
-                url: ${{ steps.publish.output.remoteUrl }}
+                url: ${{ ${{ steps.publish-pr.output.remoteUrl }} if parameters.repoExists === true else ${{ steps.publish.output.remoteUrl }} }}
         text:
             -   title: Congratulations and next steps...
                 content: |
@@ -317,7 +317,7 @@ spec:
 
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
-                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists === true else 'new repo' }}](${{ steps.publish.output.remoteUrl }}) ${{ 'especially the README file and the example home page' if parameters.repoExists !== true }}
+                    * check out the contents of [your ${{ 'new pr' if parameters.repoExists === true else 'new repo' }}](${{ ${{ steps.publish-pr.output.remoteUrl }} if parameters.repoExists === true else ${{ steps.publish.output.remoteUrl }} }}) ${{ 'especially the README file and the example home page' if parameters.repoExists !== true }}
                     * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
                     * add your additional pages to the repository
 
