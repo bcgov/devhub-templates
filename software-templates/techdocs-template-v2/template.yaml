@@ -172,7 +172,7 @@ spec:
                                     docsPath:
                                         title: Documentation subdirectory
                                         type: string
-                                        pattern: '^(?!\/.*$).*'
+                                        pattern: '^(?!\/.*$).*' # no leading '/'s
                                         description: The path to an existing documentation subdirectory. For example, "docs/src".
                                         default: docs
     steps:
@@ -293,7 +293,7 @@ spec:
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
-        -   id: publish
+        -   id: publish-pr
             name: Publish
             if: ${{ parameters.repoExists === true }}
             action: publish:github:pull-request
