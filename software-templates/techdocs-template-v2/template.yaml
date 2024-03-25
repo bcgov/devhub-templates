@@ -180,7 +180,7 @@ spec:
             name: Add files from skeleton and apply user-provided values.
             action: fetch:template
             input:
-                url: ./skeleton
+                url: ../../shared/techdocs-skeleton
                 values:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
@@ -211,6 +211,25 @@ spec:
                         to: "${{ parameters.docsPath }}/getting-started.md"
                     -   from: "docs/tips-and-tricks.md"
                         to: "${{ parameters.docsPath }}/tips-and-tricks.md"
+        -   id: rename-readme
+            name: Rename README.md & LICENSE for Pull Request
+            if: ${{ parameters.repoExists === true }}
+            action: fs:rename
+            input:
+                files:
+                    -   from: README.md
+                        to: README_TECHDOCS.md
+                    -   from: LICENSE
+                        to: LICENSE_CONTENT
+        -   id: delete-files
+            name: Remove excluded files
+            if: ${{ parameters.repoExists === true }}
+            action: fs:delete
+            input:
+                files:
+                    - ".gitignore"
+                    - CODE_OF_CONDUCT.md
+                    - CONTRIBUTING.md
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
@@ -234,15 +253,15 @@ spec:
                         type: documentation
                         lifecycle: experimental
                         owner: ${{ parameters.owner | default("developer-experience", true) }}
-        # -   id: fetch-action
-        #     name: Add GitHub Actions workflow files.
-        #     action: fetch:template
-        #     input:
-        #         url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
-        #         targetPath: ./.github
-        #         values:
-        #             docs_path: ${{ parameters.docsPath if parameters.repoExists === true else 'docs' }}
-        #             target_branch: ${{ parameters.targetBranchName if parameters.repoExists === true else 'main' }}
+        -   id: fetch-action
+            name: Add GitHub Actions workflow files.
+            action: fetch:template
+            input:
+                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
+                targetPath: ./.github
+                values:
+                    docs_path: ${{ parameters.docsPath if parameters.repoExists === true else 'docs' }}
+                    target_branch: ${{ parameters.targetBranchName if parameters.repoExists === true else 'main' }}
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template

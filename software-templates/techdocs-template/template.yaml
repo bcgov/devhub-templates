@@ -158,7 +158,7 @@ spec:
             name: Add files from skeleton and apply user-provided values.
             action: fetch:template
             input:
-                url: ./skeleton
+                url: ../../shared/techdocs-skeleton
                 values:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
@@ -172,6 +172,8 @@ spec:
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
                     product_owner_email: ${{ parameters.product_owner_email }}
+                    docs_path: 'docs'
+                    target_branch: 'main'
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
@@ -198,10 +200,13 @@ spec:
                         owner: ${{ parameters.owner | default("developer-experience", true) }}
         -   id: fetch-action
             name: Add GitHub Actions workflow files.
-            action: fetch:plain
+            action: fetch:template
             input:
                 url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
                 targetPath: ./.github
+                values:
+                    docs_path: 'docs'
+                    target_branch: 'main'
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template
