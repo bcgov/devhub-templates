@@ -12,5 +12,6 @@ nav:
 plugins:
     - techdocs-core
     - git-revision-date-localized
+    - macros
 markdown_extensions:
     - md_in_html
