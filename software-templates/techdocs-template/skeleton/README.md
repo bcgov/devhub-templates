@@ -117,7 +117,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## License
 
-© 2024 Province of British Columbia
+© {{ now().year }} Province of British Columbia
 
 Refer to the [LICENSE](LICENSE.md) file for more information.
 
