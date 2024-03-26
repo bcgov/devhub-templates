@@ -280,7 +280,7 @@ spec:
         text:
             -   title: Congratulations and next steps...
                 content: |
-                    **Congratulations, you've made a new pull request for your technical documentation!**
+                    **Congratulations, you've made a new pull request to add DevHub publishing for your technical documentation!**
 
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
