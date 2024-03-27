@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
     name: docs-template
-    title: DevHub Technical Documentation Template
-    description: Create a new repository for technical documentation
+    title: Create new technical documentation repo
+    description: Create a new repo for techdocs with required files to publish to DevHub
     tags:
         - techdocs
         - markdown
@@ -28,7 +28,7 @@ spec:
                     type: string
                     description: A description for your documentation
                 owner:
-                    title: Owner
+                    title: GitHub team (optional)
                     type: string
                     description: The team in GitHub that is developing the documentation, if there is one.
                     ui:field: OwnerPicker
@@ -39,7 +39,7 @@ spec:
         -   title: Provide information about your product (or service/component)
             properties:
                 ministry:
-                    title: Ministry
+                    title: Ministry (optional)
                     type: string
                     description: Name of the ministry associated with the product
                     enum:
@@ -90,28 +90,24 @@ spec:
                         - "Tourism, Arts, Culture and Sport"
                         - "Transportation and Infrastructure"
                         - "Water, Land and Resource Stewardship"
-                program_area:
-                    title: Program area
-                    type: string
-                    description: Name of the program area associated with the product
                 product_name:
-                    title: Product name
+                    title: Product name (optional)
                     type: string
                     description: The name of the product
                 product_acronym:
-                    title: Product acronym
+                    title: Product acronym (optional)
                     type: string
                     description: An acronym used to identity the product, if there is one
                 product_owner:
-                    title: Product owner
+                    title: Product owner (optional)
                     type: string
                     description: Name of the individual in the Product Owner role for the product
                 product_owner_email:
-                    title: Product owner email
+                    title: Product owner email (optional)
                     type: string
                     description: Email address of the individual in the Product Owner role for the product
                 hosting_platform:
-                    title: Hosting platform
+                    title: Hosting platform (optional)
                     type: string
                     description: Name of the technical platform where the product is hosted
                     default: Private-Cloud-Openshift
@@ -164,10 +160,9 @@ spec:
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl | projectSlug }}
+                    repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
-                    program_area: ${{ parameters.program_area }}
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
@@ -189,7 +184,6 @@ spec:
                             github.com/project-slug: ${{ parameters.repoUrl | projectSlug }}
                             backstage.io/techdocs-ref: dir:.
                             bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
-                            bcgovpubcode.gov.bc.ca/program_area: ${{ parameters.program_area }}
                             bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
                             bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
                             bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
@@ -217,7 +211,6 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repoUrl | parseRepoUrl }}
                     ministry: ${{ parameters.ministry }}
-                    program_area: ${{ parameters.program_area }}
                     product_name: ${{ parameters.product_name }}
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
@@ -250,7 +243,7 @@ spec:
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
                     * check out the contents of [your new repo](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
-                    * check out [our Content Partner Guide](https://mvp.developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
+                    * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
                     * add your additional pages to the repository
 
                     When you'd like to have your documentation published in DevHub, [contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) and we'll work with you to set things up. Note that we have a "preview" environment and a production environment, and you'll be in control of how and when your content is published to each.

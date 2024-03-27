@@ -7,11 +7,13 @@ on:
         paths:
             - "mkdocs.yml"
             - "${{ values.docs_path }}/*"
+            - "catalog-info.yaml"
     pull_request:
         branches: [ ${{ values.target_branch }} ]
         paths:
             - "mkdocs.yml"
             - "${{ values.docs_path }}/*"
+            - "catalog-info.yaml"
 
 jobs:
     test_techdocs_build_job:
@@ -21,6 +23,8 @@ jobs:
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
+                with:
+                    fetch-depth: '0'
             -   name: Build TechDocs
                 uses: bcgov/devhub-techdocs-publish@stable
                 id: build_and_publish
