@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-    name: docs-template
-    title: Create new technical documentation repo
-    description: Create a new repo for techdocs with required files to publish to DevHub
+    name: docs-template-pr
+    title: Add existing technical documentation to DevHub
+    description: Add the required files to an existing repo to publish to DevHub
     tags:
         - techdocs
         - markdown
@@ -134,9 +134,11 @@ spec:
         -   title: Specify repository details
             required:
                 - repoUrl
+                - targetBranchName
+                - docsPath
             properties:
                 repoUrl:
-                    title: Name of the repository that we will create to store your documentation
+                    title: Specify details for creating a new repository or a pull request to an existing repo
                     type: string
                     ui:field: RepoUrlPicker
                     ui:options:
@@ -149,6 +151,17 @@ spec:
                             - github.com
                         allowedOwners:
                             - bcgov
+                targetBranchName:
+                    title: Target branch name
+                    type: string
+                    description: The target branch name of the merge request
+                    default: main
+                docsPath:
+                    title: Documentation subdirectory
+                    type: string
+                    pattern: '^(?!\/.*$).*' # no leading '/'s
+                    description: The path to an existing documentation subdirectory. For example, "docs/src".
+                    default: docs
     steps:
         -   id: fetch-base
             name: Add files from skeleton and apply user-provided values.
@@ -167,8 +180,41 @@ spec:
                     product_acronym: ${{ parameters.product_acronym }}
                     product_owner: ${{ parameters.product_owner }}
                     product_owner_email: ${{ parameters.product_owner_email }}
-                    docs_path: 'docs'
-                    target_branch: 'main'
+                    docs_path: ${{ parameters.docsPath }}
+                    target_branch: ${{ parameters.targetBranchName }}
+        -   id: rename-files
+            name: Rename docs folder to repo subdir if necessary
+            if: ${{ parameters.docsPath !== 'docs' and parameters.docsPath !== 'docs/' }}
+            action: fs:rename
+            input:
+                files:
+                    -   from: "docs/index.md"
+                        to: "${{ parameters.docsPath }}/index.md"
+                    -   from: "docs/about-us.md"
+                        to: "${{ parameters.docsPath }}/about-us.md"
+                    -   from: "docs/configuration.md"
+                        to: "${{ parameters.docsPath }}/configuration.md"
+                    -   from: "docs/getting-started.md"
+                        to: "${{ parameters.docsPath }}/getting-started.md"
+                    -   from: "docs/tips-and-tricks.md"
+                        to: "${{ parameters.docsPath }}/tips-and-tricks.md"
+        -   id: rename-readme
+            name: Rename README.md & LICENSE for Pull Request
+            action: fs:rename
+            input:
+                files:
+                    -   from: README.md
+                        to: README_TECHDOCS.md
+                    -   from: LICENSE
+                        to: LICENSE_CONTENT
+        -   id: delete-files
+            name: Remove excluded files
+            action: fs:delete
+            input:
+                files:
+                    - ".gitignore"
+                    - CODE_OF_CONDUCT.md
+                    - CONTRIBUTING.md
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
@@ -187,7 +233,7 @@ spec:
                             bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
                             bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
                             bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
-                            developer.gov.bc.ca/source_template: "default/docs-template"
+                            developer.gov.bc.ca/source_template: "default/docs-template-pr"
                     spec:
                         type: documentation
                         lifecycle: experimental
@@ -199,8 +245,8 @@ spec:
                 url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
                 targetPath: ./.github
                 values:
-                    docs_path: 'docs'
-                    target_branch: 'main'
+                    docs_path: ${{ parameters.docsPath }}
+                    target_branch: ${{ parameters.targetBranchName }}
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template
@@ -217,34 +263,29 @@ spec:
                     hosting_platform: ${{ parameters.hosting_platform }}
         -   id: publish
             name: Publish
-            action: publish:github
+            action: publish:github:pull-request
             input:
-                allowedHosts: [ "github.com" ]
-                description: This is ${{ parameters.name }}
                 repoUrl: ${{ parameters.repoUrl }}
+                title: "DevHub publishing pull request"
+                branchName: "DevHub-publishing-pr-branch"
+                description: "This pull request will add the files required to publish documentation on DevHub"
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
-                repoVisibility: "public"
-                defaultBranch: "main"
-                gitCommitMessage: "DevHub creating new repository for TechDocs."
-                gitAuthorName: ${{ user.entity.metadata.name }} # this likely won't populate properly we do some additional work on sign in to improve the default behaviour.
-                gitAuthorEmail: ${{ user.entity.spec.profile.email }} # this likely won't work  populate properly until we do some additional work on sign in to improve the default behaviour.
-                hasProjects: false
-                hasWiki: false
-                topics: [ "techdocs", "devhub" ]
+                targetBranchName: ${{ parameters.targetBranchName }}
+                commitMessage: "DevHub creating new files for TechDocs."
+                update: true
     output:
         links:
-            -   title: Repository
+            -   title: New Pull Request
                 url: ${{ steps.publish.output.remoteUrl }}
         text:
             -   title: Congratulations and next steps...
                 content: |
-                    **Congratulations, you've made a new GitHub repository for your technical documentation!**
+                    **Congratulations, you've made a new pull request to add DevHub publishing for your technical documentation!**
 
                     ## Here are the next steps you can take to get your documentation published in DevHub:
 
-                    * check out the contents of [your new repo](${{ steps.publish.output.remoteUrl }}) especially the [README file](${{ steps.publish.output.remoteUrl }}/README.md) and the [example home page](${{ steps.publish.output.remoteUrl }}/docs/index.md)
+                    * check out the contents of [your new pr](${{ steps.publish.output.remoteUrl }}) especially the [README and index.md files](${{ steps.publish.output.remoteUrl }}/files)
                     * check out [our Content Partner Guide](https://developer.gov.bc.ca) for info on "how this all works" and for creating your documentation
-                    * add your additional pages to the repository
+                    * add your pages to the mkdocs.yml file
 
                     When you'd like to have your documentation published in DevHub, [contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) and we'll work with you to set things up. Note that we have a "preview" environment and a production environment, and you'll be in control of how and when your content is published to each.
-

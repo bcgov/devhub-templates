@@ -1,8 +1,8 @@
 site_name: "${{ values.title }}"
 site_description: "${{ values.description }}"
-docs_dir: "docs"
+docs_dir: "${{ values.docs_path }}"
 repo_url: "https://${{ values.repo_url.host }}/${{ values.repo_url.owner }}/${{ values.repo_url.repo}}"
-edit_uri: edit/main/docs/
+edit_uri: edit/${{ values.target_branch }}/${{ values.docs_path }}
 nav:
     - Introduction: index.md
     - Getting started: getting-started.md
