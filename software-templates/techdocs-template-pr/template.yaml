@@ -136,6 +136,7 @@ spec:
                 - repoUrl
                 - targetBranchName
                 - docsPath
+                - isDraftPr
             properties:
                 repoUrl:
                     title: Specify details for creating a new repository or a pull request to an existing repo
@@ -162,6 +163,11 @@ spec:
                     pattern: '^(?!\/.*$).*' # no leading '/'s
                     description: The path to an existing documentation subdirectory. For example, "docs/src".
                     default: docs
+                isDraftPr:
+                    title: Create a draft pull request
+                    type: boolean
+                    description: Specify if the new pull request should be a draft
+                    default: false
     steps:
         -   id: fetch-base
             name: Add files from skeleton and apply user-provided values.
@@ -272,6 +278,7 @@ spec:
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 targetBranchName: ${{ parameters.targetBranchName }}
                 commitMessage: "DevHub creating new files for TechDocs."
+                draft: ${{ parameters.isDraftPr }}
                 update: true
     output:
         links:
