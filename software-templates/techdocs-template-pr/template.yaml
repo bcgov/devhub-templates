@@ -198,15 +198,19 @@ spec:
                         to: "${{ parameters.docsPath }}/getting-started.md"
                     -   from: "docs/tips-and-tricks.md"
                         to: "${{ parameters.docsPath }}/tips-and-tricks.md"
+        -   id: add-license
+            name: Add license file.
+            action: fetch:plain:file
+            input:
+                url: ./licenses/CreativeCommons/LICENSE
+                targetPath: ./LICENSE_CONTENT
         -   id: rename-readme
-            name: Rename README.md & LICENSE for Pull Request
+            name: Rename README.md for Pull Request
             action: fs:rename
             input:
                 files:
                     -   from: README.md
                         to: README_TECHDOCS.md
-                    -   from: LICENSE
-                        to: LICENSE_CONTENT
         -   id: delete-files
             name: Remove excluded files
             action: fs:delete

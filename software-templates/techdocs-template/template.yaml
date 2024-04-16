@@ -131,6 +131,19 @@ spec:
                         - "Other platform that isn't listed"
                         - "Not sure"
                         - "Not applicable"
+        -   title: Select a license for your repository
+            required:
+                - licenseType
+            properties:
+                licenseType:
+                    title: The repository license for your documentation
+                    type: string
+                    description: Choose a license for your technical documentation
+                    default: CreativeCommons
+                    enum:
+                        - CreativeCommons
+                    enumNames:
+                        - 'Creative Commons'
         -   title: Specify repository details
             required:
                 - repoUrl
@@ -154,7 +167,7 @@ spec:
             name: Add files from skeleton and apply user-provided values.
             action: fetch:template
             input:
-                url: ../../shared/techdocs-skeleton
+                url: ./techdocs-skeleton
                 values:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
@@ -169,6 +182,12 @@ spec:
                     product_owner_email: ${{ parameters.product_owner_email }}
                     docs_path: 'docs'
                     target_branch: 'main'
+        -   id: add-license
+            name: Add license file.
+            action: fetch:plain:file
+            input:
+                url: ./licenses/${{ parameters.licenseType }}/LICENSE
+                targetPath: ./LICENSE
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write
@@ -192,20 +211,20 @@ spec:
                         type: documentation
                         lifecycle: experimental
                         owner: ${{ parameters.owner | default("developer-experience", true) }}
-        -   id: fetch-action
-            name: Add GitHub Actions workflow files.
-            action: fetch:template
-            input:
-                url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
-                targetPath: ./.github
-                values:
-                    docs_path: 'docs'
-                    target_branch: 'main'
+        # -   id: fetch-action
+        #     name: Add GitHub Actions workflow files.
+        #     action: fetch:template
+        #     input:
+        #         url: ../../shared/.github # pull from a shared location. The workflow lives in this location so we can reuse it access multiple templates instead of cutting and pasting it.
+        #         targetPath: ./.github
+        #         values:
+        #             docs_path: 'docs'
+        #             target_branch: 'main'
         -   id: pubcode
             name: Template Pubcode
             action: fetch:template
             input:
-                url: ../../shared/pubcode
+                url: ./pubcode
                 values:
                     name: ${{ parameters.product_name }}
                     description: ${{ parameters.description }}
