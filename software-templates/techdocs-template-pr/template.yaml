@@ -131,6 +131,19 @@ spec:
                         - "Other platform that isn't listed"
                         - "Not sure"
                         - "Not applicable"
+        -   title: Select a license for your repository
+            required:
+                - licenseType
+            properties:
+                licenseType:
+                    title: The repository license for your documentation
+                    type: string
+                    description: Choose a license for your technical documentation
+                    default: CreativeCommons
+                    enum:
+                        - CreativeCommons
+                    enumNames:
+                        - 'Creative Commons'
         -   title: Specify repository details
             required:
                 - repoUrl
@@ -202,7 +215,7 @@ spec:
             name: Add license file.
             action: fetch:plain:file
             input:
-                url: ../../shared/licenses/CreativeCommons/LICENSE
+                url: ../../shared/licenses/${{ parameters.licenseType }}/LICENSE
                 targetPath: ./LICENSE_CONTENT
         -   id: rename-readme
             name: Rename README.md for Pull Request
