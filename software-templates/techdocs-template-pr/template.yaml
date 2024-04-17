@@ -202,7 +202,7 @@ spec:
             name: Add license file.
             action: fetch:plain:file
             input:
-                url: ./licenses/CreativeCommons/LICENSE
+                url: ../../shared/licenses/CreativeCommons/LICENSE
                 targetPath: ./LICENSE_CONTENT
         -   id: rename-readme
             name: Rename README.md for Pull Request
