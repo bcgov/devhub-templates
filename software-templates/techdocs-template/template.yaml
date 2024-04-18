@@ -141,8 +141,10 @@ spec:
                     description: Choose a license for your technical documentation
                     default: CreativeCommons
                     enum:
+                        - None
                         - CreativeCommons
                     enumNames:
+                        - 'None'
                         - 'Creative Commons'
         -   title: Specify repository details
             required:
@@ -184,6 +186,7 @@ spec:
                     target_branch: 'main'
         -   id: add-license
             name: Add license file.
+            if: ${{ parameters.licenseType !== 'None' }}
             action: fetch:plain:file
             input:
                 url: ../../shared/licenses/${{ parameters.licenseType }}/LICENSE
