@@ -1,0 +1,50 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: GitHub-Repo-Transfer
+  title: Transfer a repository between organizations
+  description: Transfer a repository from the bcgov GitHub organization to the bcgov-public GitHub enterprise organization
+spec:
+  owner: "developer-experience"
+  type: service
+
+  parameters:
+    - title: Specify repository details
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository to transfer
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
+              secretsKey: USER_OAUTH_TOKEN
+              additionalScopes:
+                github:
+                  - workflow
+            allowedHosts:
+              - github.com
+            allowedOwners:
+              - bcgov
+
+  steps:
+    - id: transfer-repo
+      name: 'Transfer repo'
+      action: 'http:backstage:request'
+      input:
+        method: 'POST'
+        path: 'proxy/github-api/repos/bcgov/${{ (parameters.repoUrl | parseRepoUrl).repo }}/transfer'
+        logRequestPath: true
+        headers:
+          content-type: 'application/json'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+        body:
+          new_owner: bcgov-public
+
+  output:
+    text:
+      - title: The Response 
+        content: |
+          Response code: ${{ steps['transfer-repo'].output.code }}
+          Response body: ${{ steps['transfer-repo'].output.body | dump}}
