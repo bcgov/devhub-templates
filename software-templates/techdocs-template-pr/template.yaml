@@ -3,7 +3,7 @@ kind: Template
 metadata:
     name: docs-template-pr
     title: Add existing technical documentation to DevHub
-    description: Add the required files to an existing repo to publish to DevHub
+    description: Add the required files to an existing repo to publish on DevHub
     tags:
         - techdocs
         - markdown

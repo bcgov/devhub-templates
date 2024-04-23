@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
     name: docs-template
-    title: Create new technical documentation repo
-    description: Create a new repo for techdocs with required files to publish to DevHub
+    title: Create a technical documentation repo
+    description: Create a new repo for techdocs with required files to publish on DevHub
     tags:
         - techdocs
         - markdown
