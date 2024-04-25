@@ -9,11 +9,13 @@ spec:
   type: service
 
   parameters:
-    - title: Specify repository details
+    - title: Transfer a repository
       required:
-        - repoUrl
+        - repoToTransfer
+        - owner
+        - destination
       properties:
-        repoUrl:
+        repoToTransfer:
           title: Repository to transfer
           type: string
           ui:field: RepoUrlPicker
@@ -27,24 +29,259 @@ spec:
               - github.com
             allowedOwners:
               - bcgov
+        destination:
+          title: Destination GitHub Organization
+          type: string
+          description: GitHub organization where the repo will be transferred to
+          enum: 
+            - bcgov-public
+          enumNames: 
+            - "bcgov-public"
+        owner:
+          title: GitHub team (required)
+          type: string
+          description: The team in the bcgov-public GitHub Organization that maintains the repo
+          ui:field: OwnerPicker
+          ui:options:
+              allowArbitraryValues: false
+              catalogFilter:
+                - kind: [ Group ]
+                  metadata.namespace: bcgov-public
+
+    - title: Provide information about your product/service/component
+      required:
+        - title
+        - description
+        - type
+        - lifecycle
+      properties:
+        title:
+          title: Title
+          type: string
+          description: A title for your product. For example, "Whizzbang Service".
+          ui:autofocus: true
+        description:
+          title: Description
+          type: string
+          description: A description for product/service/component.
+        # type field for catalog-info.yaml file, these values based on https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required
+        type:
+          title: Product type
+          type: string
+          description: What your product/service/component provides.
+          enum: 
+            - documentation
+            - library
+            - service
+            - website
+            - other
+          enumNames: 
+            - "documentation - a standalone documentation repo"
+            - "library - a software library, such as an npm module or a Java library"
+            - "service - a backend service, typically exposing an API"
+            - "website - a website"
+            - "other"
+        # lifecycle field for catalog-info.yaml file, these values based on https://backstage.io/docs/features/software-catalog/descriptor-format/#speclifecycle-required
+        lifecycle:
+          title: Product lifecycle
+          type: string
+          description: What is the current state of the product
+          enum:
+            - experimental
+            - production
+            - deprecated
+          enumNames:
+            - "experimental - an experiment or early, non-production component"
+            - "production - an established, owned, maintained component"
+            - "deprecated - a component that is at the end of its lifecycle, and may disappear at a later point in time"
+      
+    - title: Provide information about your product (or service/component)
+      properties:
+        ministry:
+          title: Ministry (optional)
+          type: string
+          description: Name of the ministry associated with the product
+          enum:
+            - AF
+            - AG
+            - MCF
+            - CITZ
+            - ECC
+            - EMCR
+            - EMLI
+            - ENV
+            - FIN
+            - FOR
+            - HLTH
+            - HOUS
+            - IRR
+            - JEDI
+            - LBR
+            - MMHA
+            - MUNI
+            - PSFS
+            - PSSG
+            - SDPR
+            - TACS
+            - TRAN
+            - WLRS
+          enumNames:
+            - "Agriculture and Food"
+            - "Attorney General"
+            - "Children and Family Development"
+            - "Citizens' Services"
+            - "Education and Child Care"
+            - "Emergency Management and Climate Readiness"
+            - "Energy, Mines and Low Carbon Innovation"
+            - "Environment and Climate Change Strategy"
+            - "Finance"
+            - "Forests"
+            - "Health"
+            - "Housing"
+            - "Indigenous Relations & Reconciliation"
+            - "Jobs, Economic Development and Innovation"
+            - "Labour"
+            - "Mental Health and Addictions"
+            - "Municipal Affairs"
+            - "Post-Secondary Education and Future Skills"
+            - "Public Safety and Solicitor General"
+            - "Social Development and Poverty Reduction"
+            - "Tourism, Arts, Culture and Sport"
+            - "Transportation and Infrastructure"
+            - "Water, Land and Resource Stewardship"
+        product_name:
+          title: Product name (optional)
+          type: string
+          description: The name of the product
+        product_acronym:
+          title: Product acronym (optional)
+          type: string
+          description: An acronym used to identity the product, if there is one
+        product_owner:
+          title: Product owner (optional)
+          type: string
+          description: Name of the individual in the Product Owner role for the product
+        product_owner_email:
+          title: Product owner email (optional)
+          type: string
+          description: Email address of the individual in the Product Owner role for the product
+        hosting_platform:
+          title: Hosting platform (optional)
+          type: string
+          description: Name of the technical platform where the product is hosted
+          default: Private-Cloud-Openshift
+          enum:
+            - Amazon-Web-Services
+            - Google-Cloud-Platform
+            - Microsoft-Azure
+            - On-Premise-Physical
+            - On-Premise-Virtual
+            - Private-Cloud-Openshift
+            - Other
+            - Unknown
+            - Not-Applicable
+          enumNames:
+            - 'Amazon Web Service'
+            - 'Google Cloud Platform'
+            - 'Microsoft Azure'
+            - 'On-premise virtual infrastructure'
+            - 'On-premise physical infrastructure'
+            - 'OpenShift private cloud'
+            - "Other platform that isn't listed"
+            - "Not sure"
+            - "Not applicable"
 
   steps:
+    # Need to get the team id because the transfer repo endpoint accepts teamid not team slug
+    - id: get-team-id
+      name: 'Get team id'
+      action: 'http:backstage:request'
+      input:
+        method: 'GET'
+        path: 'proxy/github-api/orgs/${{ parameters.destination }}/teams/${{ parameters.owner | parseEntityRef | pick("name") }}'
+        logRequestPath: true
+        headers:
+          content-type: 'application/json'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+
     - id: transfer-repo
       name: 'Transfer repo'
       action: 'http:backstage:request'
       input:
         method: 'POST'
-        path: 'proxy/github-api/repos/bcgov/${{ (parameters.repoUrl | parseRepoUrl).repo }}/transfer'
+        path: 'proxy/github-api/repos/bcgov/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/transfer'
         logRequestPath: true
         headers:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
         body:
-          new_owner: bcgov-public
+          new_owner: ${{ parameters.destination }}
+          # Team will be set with read permissions. There is an api to set the permissions, but the
+          # user needs to have admin access to the repo already. 
+          # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions
+          team_ids: [ '${{ steps["get-team-id"].output.body.id }}' ]
+
+    - id: create-catalog-file
+      name: Create catalog file.
+      action: catalog:write
+      input:
+        entity:
+          apiVersion: backstage.io/v1alpha1
+          kind: Component
+          metadata:
+            name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+            title: ${{ parameters.title }}
+            description: ${{parameters.description }}
+            annotations:
+              github.com/project-slug: ${{ parameters.repoToTransfer | projectSlug }}
+              backstage.io/techdocs-ref: dir:.
+              bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
+              bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
+              bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
+              bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
+              developer.gov.bc.ca/source_template: "default/transfer-repo"
+          spec:
+              type: ${{ parameters.type }}  
+              lifecycle: ${{ parameters.lifecycle }}  
+              owner: ${{ parameters.owner | default("developer-experience", true) }}  
+
+    - id: wait-for-repo
+      name: waiting
+      action: debug:wait
+      input:
+        seconds: 5
+
+    - id: get-default-branch
+      name: 'Get default branch'
+      action: 'http:backstage:request'
+      input:
+        method: 'GET'
+        # repo has been moved so get it from new location
+        path: 'proxy/github-api/repos/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
+        logRequestPath: true
+        headers:
+          content-type: 'application/json'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+
+    - id: create-pr-meta-data
+      name: 'Create PR to add meta data'
+      action: publish:github:pull-request
+      input:
+        repoUrl: 'github.com?repo=${{ (parameters.repoToTransfer | parseRepoUrl).repo }}&owner=${{ parameters.destination }}'
+        title: "Add DevHub meta data"
+        branchName: "DevHub-publishing-pr-branch"
+        description: "This pull request will add DevHub meta data files"
+        token: ${{ secrets.USER_OAUTH_TOKEN }} 
+        targetBranchName: '${{ steps["get-team-id"].output.body.default_branch }}'
+        commitMessage: "Add DevHub meta data files"
+        update: true
 
   output:
+    links:
+      - title: Transferred repo
+        url: 'https://github.com/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
     text:
       - title: The Response 
         content: |
-          Response code: ${{ steps['transfer-repo'].output.code }}
-          Response body: ${{ steps['transfer-repo'].output.body | dump}}
+          Repository was transferred 
+      
