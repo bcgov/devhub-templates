@@ -34,8 +34,9 @@ spec:
                     ui:field: OwnerPicker
                     ui:options:
                         allowArbitraryValues: false
-                        allowedKinds:
-                            - Group
+                        catalogFilter:
+                            - kind: [ Group ]
+                              metadata.namespace: bcgov
         -   title: Provide information about your product (or service/component)
             properties:
                 ministry:

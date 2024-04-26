@@ -32,7 +32,7 @@ spec:
         destination:
           title: Destination GitHub Organization
           type: string
-          description: GitHub organization where the repo will be transferred to
+          description: GitHub organization where the repo will be transferred to.
           enum: 
             - bcgov-public
           enumNames: 
@@ -40,7 +40,7 @@ spec:
         owner:
           title: GitHub team (required)
           type: string
-          description: The team in the bcgov-public GitHub Organization that maintains the repo
+          description: The team in the bcgov-public GitHub Organization that maintains the repo.
           ui:field: OwnerPicker
           ui:options:
               allowArbitraryValues: false
@@ -76,7 +76,7 @@ spec:
             - website
             - other
           enumNames: 
-            - "documentation - a standalone documentation repo"
+            - "documentation - a documentation repository"
             - "library - a software library, such as an npm module or a Java library"
             - "service - a backend service, typically exposing an API"
             - "website - a website"
@@ -85,7 +85,7 @@ spec:
         lifecycle:
           title: Product lifecycle
           type: string
-          description: What is the current state of the product
+          description: What is the current state of the product/service/component.
           enum:
             - experimental
             - production
@@ -95,12 +95,12 @@ spec:
             - "production - an established, owned, maintained component"
             - "deprecated - a component that is at the end of its lifecycle, and may disappear at a later point in time"
       
-    - title: Provide information about your product (or service/component)
+    - title: Provide information about your product/service/component
       properties:
         ministry:
           title: Ministry (optional)
           type: string
-          description: Name of the ministry associated with the product
+          description: Name of the ministry associated with the product.
           enum:
             - AF
             - AG
@@ -152,23 +152,23 @@ spec:
         product_name:
           title: Product name (optional)
           type: string
-          description: The name of the product
+          description: The name of the product.
         product_acronym:
           title: Product acronym (optional)
           type: string
-          description: An acronym used to identity the product, if there is one
+          description: An acronym used to identity the product, if there is one.
         product_owner:
           title: Product owner (optional)
           type: string
-          description: Name of the individual in the Product Owner role for the product
+          description: Name of the individual in the Product Owner role for the product.
         product_owner_email:
           title: Product owner email (optional)
           type: string
-          description: Email address of the individual in the Product Owner role for the product
+          description: Email address of the individual in the Product Owner role for the product.
         hosting_platform:
           title: Hosting platform (optional)
           type: string
-          description: Name of the technical platform where the product is hosted
+          description: Name of the technical platform where the product is hosted.
           default: Private-Cloud-Openshift
           enum:
             - Amazon-Web-Services
@@ -192,37 +192,19 @@ spec:
             - "Not applicable"
 
   steps:
-    # Need to get the team id because the transfer repo endpoint accepts teamid not team slug
-    - id: get-team-id
-      name: 'Get team id'
-      action: 'http:backstage:request'
+    - id: get-default-branch
+      name: Get repo's default branch
+      action: http:backstage:request
       input:
         method: 'GET'
-        path: 'proxy/github-api/orgs/${{ parameters.destination }}/teams/${{ parameters.owner | parseEntityRef | pick("name") }}'
+        path: 'proxy/github-api/repos/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
         logRequestPath: true
         headers:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
-
-    - id: transfer-repo
-      name: 'Transfer repo'
-      action: 'http:backstage:request'
-      input:
-        method: 'POST'
-        path: 'proxy/github-api/repos/bcgov/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/transfer'
-        logRequestPath: true
-        headers:
-          content-type: 'application/json'
-          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
-        body:
-          new_owner: ${{ parameters.destination }}
-          # Team will be set with read permissions. There is an api to set the permissions, but the
-          # user needs to have admin access to the repo already. 
-          # https://docs.github.com/en/rest/teams/teams?apiVersion=2022-11-28#add-or-update-team-repository-permissions
-          team_ids: [ '${{ steps["get-team-id"].output.body.id }}' ]
 
     - id: create-catalog-file
-      name: Create catalog file.
+      name: Create catalog file
       action: catalog:write
       input:
         entity:
@@ -233,7 +215,7 @@ spec:
             title: ${{ parameters.title }}
             description: ${{parameters.description }}
             annotations:
-              github.com/project-slug: ${{ parameters.repoToTransfer | projectSlug }}
+              github.com/project-slug: ${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}
               backstage.io/techdocs-ref: dir:.
               bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
               bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
@@ -245,43 +227,74 @@ spec:
               lifecycle: ${{ parameters.lifecycle }}  
               owner: ${{ parameters.owner | default("developer-experience", true) }}  
 
-    - id: wait-for-repo
-      name: waiting
-      action: debug:wait
+    - id: pubcode
+      name: Create pubcode file
+      action: fetch:template
       input:
-        seconds: 5
+        url: ../../shared/pubcode
+        values:
+          name: ${{ parameters.product_name }}
+          description: ${{ parameters.description }}
+          ministry: ${{ parameters.ministry }}
+          product_name: ${{ parameters.product_name }}
+          product_acronym: ${{ parameters.product_acronym }}
+          product_owner: ${{ parameters.product_owner }}
+          hosting_platform: ${{ parameters.hosting_platform }}
 
-    - id: get-default-branch
-      name: 'Get default branch'
-      action: 'http:backstage:request'
+    # The PR is created on the repo before the transfer because there is a timing issue if the PR is created after the transfer
+    # The PR creation will fail because the transfer has not completed. So, create the PR on the repo before it is transferred
+    # The PR will be moved with the repo.
+    - id: create-pr-meta-data
+      name: Create PR to add meta data
+      action: publish:github:pull-request
+      input:
+        repoUrl: ${{ parameters.repoToTransfer }}
+        title: "Add DevHub meta data"
+        branchName: "DevHub-transfer-pr-branch"
+        description: "This pull request will add DevHub meta data files"
+        token: ${{ secrets.USER_OAUTH_TOKEN }} 
+        targetBranchName: '${{ steps["get-default-branch"].output.body.default_branch }}'
+        commitMessage: "Add DevHub meta data files"
+        update: true
+
+    # Need to get the team id because the transfer repo endpoint accepts teamid not team slug
+    - id: get-team-id
+      name: Get team id
+      action: http:backstage:request
       input:
         method: 'GET'
-        # repo has been moved so get it from new location
-        path: 'proxy/github-api/repos/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
+        path: 'proxy/github-api/orgs/${{ parameters.destination }}/teams/${{ parameters.owner | parseEntityRef | pick("name") }}'
         logRequestPath: true
         headers:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
 
-    - id: create-pr-meta-data
-      name: 'Create PR to add meta data'
-      action: publish:github:pull-request
+    - id: transfer-repo
+      name: Transfer repo
+      action: http:backstage:request
       input:
-        repoUrl: 'github.com?repo=${{ (parameters.repoToTransfer | parseRepoUrl).repo }}&owner=${{ parameters.destination }}'
-        title: "Add DevHub meta data"
-        branchName: "DevHub-publishing-pr-branch"
-        description: "This pull request will add DevHub meta data files"
-        token: ${{ secrets.USER_OAUTH_TOKEN }} 
-        targetBranchName: '${{ steps["get-team-id"].output.body.default_branch }}'
-        commitMessage: "Add DevHub meta data files"
-        update: true
+        method: 'POST'
+        path: 'proxy/github-api/repos/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/transfer'
+        logRequestPath: true
+        headers:
+          content-type: 'application/json'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+        body:
+          new_owner: ${{ parameters.destination }}
+          team_ids: [ '${{ steps["get-team-id"].output.body.id }}' ]
 
   output:
     links:
-      - title: Transferred repo
+      - title: Transferred repository URL
         url: 'https://github.com/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
     text:
-      - title: The Response 
-        content: |
-          Repository was transferred 
-      
+      - title: Next Steps
+        content: |         
+          The repository was [transferred to the ${{ parameters.destination }} organization](https://github.com/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}). 
+
+          The [${{ parameters.owner | parseEntityRef | pick("name") }} team was assigned to the repository](https://github.com/${{ parameters.destination }}//${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/settings/access), but its access will need to be updated.
+          
+          [PR-${{ steps["create-pr-meta-data"].output.pullRequestNumber }} was created](${{ steps["create-pr-meta-data"].output.remoteUrl }}) to add DevHub meta data to the repository. Please review and approve it.
+          
+          [Contact the Developer Experience Team](mailto:developer.experience@gov.bc.ca) if you have any questions or issues about the trasferred repository.
+ 
