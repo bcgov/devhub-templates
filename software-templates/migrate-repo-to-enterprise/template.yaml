@@ -33,6 +33,7 @@ spec:
           title: Destination GitHub Organization
           type: string
           description: GitHub organization where the repo will be transferred to.
+          default: bcgov-public
           enum: 
             - bcgov-public
           enumNames: 
@@ -66,9 +67,9 @@ spec:
           description: A description for product/service/component.
         # type field for catalog-info.yaml file, these values based on https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required
         type:
-          title: Product type
+          title: Product category
           type: string
-          description: What your product/service/component provides.
+          description: Which categorization best matches the contents of the repository?
           enum: 
             - documentation
             - library
@@ -85,7 +86,7 @@ spec:
         lifecycle:
           title: Product lifecycle
           type: string
-          description: What is the current state of the product/service/component.
+          description: What is the current state of the product/service/component?
           enum:
             - experimental
             - production
