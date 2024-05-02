@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
     name: docs-template
-    title: Create new technical documentation repo
-    description: Create a new repo for techdocs with required files to publish to DevHub
+    title: Create a technical documentation repo
+    description: Create a new repo for techdocs with required files to publish on DevHub
     tags:
         - techdocs
         - markdown
@@ -131,6 +131,58 @@ spec:
                         - "Other platform that isn't listed"
                         - "Not sure"
                         - "Not applicable"
+        -   title: Select a license for your repository
+            required:
+                - licenseType
+            properties:
+                licenseType:
+                    title: The repository license for your documentation
+                    type: string
+                    description: |
+                        Select a license for your technical documentation
+
+                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                        to read more about licensing your repository
+                    default: CreativeCommons
+                    enum:
+                        - None
+                        - CreativeCommons
+                        - Apache2
+                    enumNames:
+                        - 'None'
+                        - 'Creative Commons'
+                        - 'Apache 2'
+            dependencies:
+                licenseType:
+                    allOf:
+                        - if:
+                            properties:
+                                licenseType:
+                                    const: CreativeCommons
+                          then:
+                            properties:
+                                licenseType:
+                                    description: |
+                                        Select a license for your technical documentation
+
+                                        **Creative Commons** - Recommended for documentation, artistic resources and educational material
+
+                                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                                        to read more about licensing your repository
+                        - if:
+                            properties:
+                                licenseType:
+                                    const: Apache2
+                          then:
+                            properties:
+                                licenseType:
+                                    description: |
+                                        Select a license for your technical documentation
+
+                                        **Apache 2** - Recommended for code
+
+                                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                                        to read more about licensing your repository
         -   title: Specify repository details
             required:
                 - repoUrl
@@ -169,6 +221,13 @@ spec:
                     product_owner_email: ${{ parameters.product_owner_email }}
                     docs_path: 'docs'
                     target_branch: 'main'
+        -   id: add-license
+            name: Add license file.
+            if: ${{ parameters.licenseType !== 'None' }}
+            action: fetch:plain:file
+            input:
+                url: ../../shared/licenses/${{ parameters.licenseType }}/LICENSE
+                targetPath: ./LICENSE
         -   id: create-catalog-file
             name: Create catalog file.
             action: catalog:write

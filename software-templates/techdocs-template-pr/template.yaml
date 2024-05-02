@@ -3,7 +3,7 @@ kind: Template
 metadata:
     name: docs-template-pr
     title: Add existing technical documentation to DevHub
-    description: Add the required files to an existing repo to publish to DevHub
+    description: Add the required files to an existing repo to publish on DevHub
     tags:
         - techdocs
         - markdown
@@ -131,6 +131,58 @@ spec:
                         - "Other platform that isn't listed"
                         - "Not sure"
                         - "Not applicable"
+        -   title: Select a license for your repository
+            required:
+                - licenseType
+            properties:
+                licenseType:
+                    title: The repository license for your documentation
+                    type: string
+                    description: |
+                        Select a license for your technical documentation
+
+                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                        to read more about licensing your repository
+                    default: CreativeCommons
+                    enum:
+                        - None
+                        - CreativeCommons
+                        - Apache2
+                    enumNames:
+                        - 'None'
+                        - 'Creative Commons'
+                        - 'Apache 2'
+            dependencies:
+                licenseType:
+                    allOf:
+                        - if:
+                            properties:
+                                licenseType:
+                                    const: CreativeCommons
+                          then:
+                            properties:
+                                licenseType:
+                                    description: |
+                                        Select a license for your technical documentation
+
+                                        **Creative Commons** - Recommended for documentation, artistic resources and educational material
+
+                                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                                        to read more about licensing your repository
+                        - if:
+                            properties:
+                                licenseType:
+                                    const: Apache2
+                          then:
+                            properties:
+                                licenseType:
+                                    description: |
+                                        Select a license for your technical documentation
+
+                                        **Apache 2** - Recommended for code
+
+                                        [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                                        to read more about licensing your repository
         -   title: Specify repository details
             required:
                 - repoUrl
@@ -198,15 +250,20 @@ spec:
                         to: "${{ parameters.docsPath }}/getting-started.md"
                     -   from: "docs/tips-and-tricks.md"
                         to: "${{ parameters.docsPath }}/tips-and-tricks.md"
+        -   id: add-license
+            name: Add license file.
+            if: ${{ parameters.licenseType !== 'None' }}
+            action: fetch:plain:file
+            input:
+                url: ../../shared/licenses/${{ parameters.licenseType }}/LICENSE
+                targetPath: ./LICENSE_CONTENT
         -   id: rename-readme
-            name: Rename README.md & LICENSE for Pull Request
+            name: Rename README.md for Pull Request
             action: fs:rename
             input:
                 files:
                     -   from: README.md
                         to: README_TECHDOCS.md
-                    -   from: LICENSE
-                        to: LICENSE_CONTENT
         -   id: delete-files
             name: Remove excluded files
             action: fs:delete
