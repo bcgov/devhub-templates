@@ -30,6 +30,7 @@ spec:
               - github.com
             allowedOwners:
               - bcgov
+              - bcgov-public
         destination:
           title: Destination GitHub Organization
           type: string
