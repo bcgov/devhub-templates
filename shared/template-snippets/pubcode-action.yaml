@@ -2,7 +2,7 @@ id: pubcode
 name: Create pubcode file
 action: fetch:template
 input:
-  url: https://github.com/bcgov/devhub-templates/tree/main/shared/pubcode
+  url: https://github.com/bcgov/devhub-templates/tree/952062e075a1732b7e2fd82800057a060e2f6f86/shared/pubcode
   values:
     name: ${{ parameters.product_name }}
     description: ${{ parameters.description }}
