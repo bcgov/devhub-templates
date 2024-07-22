@@ -1,0 +1,7 @@
+id: add-license
+name: Add license file.
+if: ${{ parameters.licenseType !== 'None' }}
+action: fetch:plain:file
+input:
+    url: https://github.com/bcgov/devhub-templates/tree/main/shared/licenses/${{ parameters.licenseType }}/LICENSE
+    targetPath: ./LICENSE_CONTENT
