@@ -2,7 +2,7 @@ id: pubcode
 name: Create pubcode file
 action: fetch:template
 input:
-  url: .
+  url: ./pubcode
   values:
     name: ${{ parameters.product_name }}
     description: ${{ parameters.description }}
