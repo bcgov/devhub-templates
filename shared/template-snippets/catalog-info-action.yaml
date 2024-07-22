@@ -1,0 +1,22 @@
+id: create-catalog-file
+name: Create catalog file
+action: catalog:write
+input:
+  entity:
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+      title: ${{ parameters.title }}
+      description: ${{parameters.description }}
+      annotations:
+        github.com/project-slug: ${{ (parameters.repo | parseRepoUrl).organization }}/${{ (parameters.repo | parseRepoUrl).repo }}
+        backstage.io/techdocs-ref: dir:.
+        bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
+        bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
+        bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
+        bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
+    spec:
+        type: ${{ parameters.type }}  
+        lifecycle: ${{ parameters.lifecycle }}  
+        owner: ${{ parameters.owner | default("developer-experience", true) }}  
