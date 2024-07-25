@@ -1,3 +1,5 @@
+# Provide properties needed for a Component's catalog-info file
+# https://backstage.io/docs/features/software-catalog/descriptor-format/#kind-component
 title: Provide information about your product/service/component
 required:
   - title

@@ -1,3 +1,13 @@
+# Creates a catalog-info file for a Component
+# https://backstage.io/docs/features/software-catalog/descriptor-format/#kind-component
+#
+# Parameters your template must supply:
+# - repo - GitHub repo your template acts on
+# - owner - The GitHub team that owns the above repo. 
+#
+# This action uses the parameters supplied from the catalog-info-component-parameters.yaml 
+# and pubcode-parameters.yaml files. If those files are not used your template must 
+# supply the expected parameters.
 id: create-catalog-file
 name: Create catalog file
 action: catalog:write
@@ -16,7 +26,11 @@ input:
         bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
         bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
         bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
+        bcgovpubcode.gov.bc.ca/hosting_platform: ${{ parameters.hosting_platform }}
     spec:
         type: ${{ parameters.type }}  
         lifecycle: ${{ parameters.lifecycle }}  
-        owner: ${{ parameters.owner | default("developer-experience", true) }}  
+        owner: ${{ parameters.owner if parameters.owner }}
+
+        
+    
