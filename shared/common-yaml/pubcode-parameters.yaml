@@ -64,10 +64,6 @@ properties:
     title: Product owner (optional)
     type: string
     description: Name of the individual in the Product Owner role for the product.
-  product_owner_email:
-    title: Product owner email (optional)
-    type: string
-    description: Email address of the individual in the Product Owner role for the product.
   hosting_platform:
     title: Hosting platform (optional)
     type: string
