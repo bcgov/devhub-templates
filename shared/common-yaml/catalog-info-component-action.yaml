@@ -24,13 +24,14 @@ input:
         backstage.io/techdocs-ref: dir:.
         bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
         bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
+        bcgovpubcode.gov.bc.ca/product_description: ${{ parameters.description }}
         bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
         bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
         bcgovpubcode.gov.bc.ca/hosting_platform: ${{ parameters.hosting_platform }}
     spec:
         type: ${{ parameters.type }}  
         lifecycle: ${{ parameters.lifecycle }}  
-        owner: ${{ parameters.owner if parameters.owner }}
+        owner: ${{ parameters.owner }}
 
         
     
