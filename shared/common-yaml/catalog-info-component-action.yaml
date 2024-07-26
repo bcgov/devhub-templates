@@ -31,7 +31,7 @@ input:
     spec:
         type: ${{ parameters.type }}  
         lifecycle: ${{ parameters.lifecycle }}  
-        owner: ${{ parameters.owner if parameters.owner }}
+        owner: ${{ parameters.owner | default("devhub-wizards-default-team", true) }}
 
         
     
