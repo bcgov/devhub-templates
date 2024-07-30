@@ -291,6 +291,9 @@ spec:
                 hasProjects: false
                 hasWiki: false
                 topics: [ "techdocs", "devhub" ]
+                collaborators:
+                    -   team: ${{ parameters.owner if parameters.owner }}
+                        access: ${{ 'admin' if parameters.owner }}
     output:
         links:
             -   title: Repository
