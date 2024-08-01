@@ -1,0 +1,48 @@
+# Provide properties needed for a Component's catalog-info file
+# https://backstage.io/docs/features/software-catalog/descriptor-format/#kind-component
+title: Provide information about your product/service/component
+required:
+  - title
+  - description
+  - type
+  - lifecycle
+properties:
+  title:
+    title: Title
+    type: string
+    description: A title for your product. For example, "Whizzbang Service".
+    ui:autofocus: true
+  description:
+    title: Description
+    type: string
+    description: A description for product/service/component.
+  # type field for catalog-info.yaml file, these values based on https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required
+  type:
+    title: Product category
+    type: string
+    description: Which categorization best matches the contents of the repository?
+    enum: 
+      - documentation
+      - library
+      - service
+      - website
+      - other
+    enumNames: 
+      - "documentation - a documentation repository"
+      - "library - a software library, such as an npm module or a Java library"
+      - "service - a backend service, typically exposing an API"
+      - "website - a website"
+      - "other"
+  # lifecycle field for catalog-info.yaml file, these values based on https://backstage.io/docs/features/software-catalog/descriptor-format/#speclifecycle-required
+  lifecycle:
+    title: Product lifecycle
+    type: string
+    description: What is the current state of the product/service/component?
+    enum:
+      - experimental
+      - production
+      - deprecated
+    enumNames:
+      - "experimental - an experiment or early, non-production component"
+      - "production - an established, owned, maintained component"
+      - "deprecated - a component that is at the end of its lifecycle, and may disappear at a later point in time"

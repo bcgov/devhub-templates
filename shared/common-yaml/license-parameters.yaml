@@ -1,0 +1,52 @@
+title: Select a license for your repository
+required:
+  - licenseType
+properties:
+  licenseType:
+    title: The repository license for your documentation
+    type: string
+    description: |
+      Select a license for your technical documentation
+
+      [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+      to read more about licensing your repository
+    default: CreativeCommons
+    enum:
+      - None
+      - CreativeCommons
+      - Apache2
+    enumNames:
+      - 'None'
+      - 'Creative Commons'
+      - 'Apache 2'
+dependencies:
+  licenseType:
+    allOf:
+      - if:
+          properties:
+            licenseType:
+              const: CreativeCommons
+        then:
+          properties:
+           licenseType:
+              description: |
+                Select a license for your technical documentation
+
+                **Creative Commons** - Recommended for documentation, artistic resources and educational material
+
+                [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                to read more about licensing your repository
+      - if:
+          properties:
+            licenseType:
+              const: Apache2
+        then:
+          properties:
+            licenseType:
+              description: |
+                Select a license for your technical documentation
+
+                **Apache 2** - Recommended for code
+
+                [Visit the BC Developer Guide](https://developer.gov.bc.ca/docs/default/component/bc-developer-guide/use-github-in-bcgov/license-your-github-repository/#preferred-licenses)
+                to read more about licensing your repository

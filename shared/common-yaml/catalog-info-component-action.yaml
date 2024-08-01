@@ -1,0 +1,37 @@
+# Creates a catalog-info file for a Component
+# https://backstage.io/docs/features/software-catalog/descriptor-format/#kind-component
+#
+# Parameters your template must supply:
+# - repo - GitHub repo your template acts on
+# - owner - The GitHub team that owns the above repo. 
+#
+# This action uses the parameters supplied from the catalog-info-component-parameters.yaml 
+# and pubcode-parameters.yaml files. If those files are not used your template must 
+# supply the expected parameters.
+id: create-catalog-file
+name: Create catalog file
+action: catalog:write
+input:
+  entity:
+    apiVersion: backstage.io/v1alpha1
+    kind: Component
+    metadata:
+      name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+      title: ${{ parameters.title }}
+      description: ${{parameters.description }}
+      annotations:
+        github.com/project-slug: ${{ (parameters.repo | parseRepoUrl).organization }}/${{ (parameters.repo | parseRepoUrl).repo }}
+        backstage.io/techdocs-ref: dir:.
+        bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
+        bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
+        bcgovpubcode.gov.bc.ca/product_description: ${{ parameters.description }}
+        bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
+        bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
+        bcgovpubcode.gov.bc.ca/hosting_platform: ${{ parameters.hosting_platform }}
+    spec:
+        type: ${{ parameters.type }}  
+        lifecycle: ${{ parameters.lifecycle }}  
+        owner: ${{ parameters.owner | default (["group:", (parameters.repo | parseRepoUrl).owner, "/devhub-wizards-default-team"] | join )}}
+
+        
+    
