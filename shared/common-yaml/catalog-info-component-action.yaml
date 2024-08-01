@@ -31,7 +31,7 @@ input:
     spec:
         type: ${{ parameters.type }}  
         lifecycle: ${{ parameters.lifecycle }}  
-        owner: ${{ parameters.owner | default("group:${{ (parameters.repo | parseRepoUrl).organization }}/devhub-wizards-default-team", true) }}
+        owner: ${{ parameters.owner | default (["group:", (parameters.repo | parseRepoUrl).owner, "/devhub-wizards-default-team"] | join )}}
 
         
     
