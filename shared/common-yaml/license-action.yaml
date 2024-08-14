@@ -1,0 +1,9 @@
+# This action uses the parameters supplied from the license-parameters.yaml file.
+# If that file is not used your template must supply the expected parameters.
+id: add-license
+name: Add license file.
+if: ${{ parameters.licenseType !== 'None' }}
+action: fetch:plain:file
+input:
+    url: https://github.com/bcgov/devhub-templates/tree/main/shared/licenses/${{ parameters.licenseType }}/LICENSE
+    targetPath: ./LICENSE_CONTENT
