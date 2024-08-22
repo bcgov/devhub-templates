@@ -26,6 +26,7 @@ spec:
                 github:
                   - workflow
                   - read_org
+                  - repo
             allowedHosts:
               - github.com
             allowedOwners:
