@@ -13,10 +13,10 @@ spec:
       required:
         - repoToTransfer
         - owner
-        - destination
+        - origin
       properties:
         repoToTransfer:
-          title: Repository to transfer
+          title: Repository to transfer to
           type: string
           ui:field: RepoUrlPicker
           ui:options:
@@ -26,24 +26,20 @@ spec:
                 github:
                   - workflow
                   - read_org
-                  - repo
             allowedHosts:
               - github.com
             allowedOwners:
               - bcgov
               - bcdevops
-              - bcgov-c
-        destination:
-          title: Destination GitHub Organization
+        origin:
+          title: Origin GitHub Organization
           type: string
-          description: GitHub organization where the repo will be transferred to.
-          default: bcgov
+          description: GitHub organization where the repo is currently
+          default: bcdevops
           enum: 
-            - bcgov
-            - bcgov-c
+            - bcdevops
           enumNames: 
-            - "bcgov"
-            - "bcgov-c"
+            - "bcdevops"
         owner:
           title: GitHub team (required)
           type: string
@@ -204,7 +200,7 @@ spec:
       action: http:backstage:request
       input:
         method: 'GET'
-        path: 'proxy/github-api/repos/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
+        path: 'proxy/github-api/repos/${{ parameters.origin }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
         logRequestPath: true
         headers:
           content-type: 'application/json'
@@ -222,7 +218,7 @@ spec:
             title: ${{ parameters.title }}
             description: ${{parameters.description }}
             annotations:
-              github.com/project-slug: ${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}
+              github.com/project-slug: ${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}
               backstage.io/techdocs-ref: dir:.
               bcgovpubcode.gov.bc.ca/ministry: ${{ parameters.ministry }}
               bcgovpubcode.gov.bc.ca/product_name: ${{ parameters.product_name }}
@@ -270,36 +266,36 @@ spec:
       action: http:backstage:request
       input:
         method: 'GET'
-        path: 'proxy/github-api/orgs/${{ parameters.destination }}/teams/${{ parameters.owner | parseEntityRef | pick("name") }}'
+        path: 'proxy/github-api/orgs/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/teams/${{ parameters.owner | parseEntityRef | pick("name") }}'
         logRequestPath: true
         headers:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
 
-    - id: transfer-repo
+    # - id: transfer-repo
       name: Transfer repo
       action: http:backstage:request
       input:
         method: 'POST'
-        path: 'proxy/github-api/repos/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/transfer'
+        path: 'proxy/github-api/repos/${{ parameters.origin }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/transfer'
         logRequestPath: true
         headers:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
         body:
-          new_owner: ${{ parameters.destination }}
+          new_owner: ${{ (parameters.repoToTransfer | parseRepoUrl).owner }}
           team_ids: [ '${{ steps["get-team-id"].output.body.id }}' ]
 
   output:
     links:
       - title: Transferred repository URL
-        url: 'https://github.com/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
+        url: 'https://github.com/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}'
     text:
       - title: Next Steps
         content: |         
-          The repository was [transferred to the ${{ parameters.destination }} organization](https://github.com/${{ parameters.destination }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}). 
+          The repository was [transferred to the ${{ (parameters.repoToTransfer | parseRepoUrl).owner }} organization](https://github.com/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}/${{ (parameters.repoToTransfer | parseRepoUrl).repo }}). 
 
-          The [${{ parameters.owner | parseEntityRef | pick("name") }} team was assigned to the repository](https://github.com/${{ parameters.destination }}//${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/settings/access), but its access will need to be updated.
+          The [${{ parameters.owner | parseEntityRef | pick("name") }} team was assigned to the repository](https://github.com/${{ (parameters.repoToTransfer | parseRepoUrl).owner }}//${{ (parameters.repoToTransfer | parseRepoUrl).repo }}/settings/access), but its access will need to be updated.
           
           [PR-${{ steps["create-pr-meta-data"].output.pullRequestNumber }} was created](${{ steps["create-pr-meta-data"].output.remoteUrl }}) to add DevHub meta data to the repository. Please review and approve it.
           
