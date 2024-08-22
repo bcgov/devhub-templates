@@ -272,7 +272,7 @@ spec:
           content-type: 'application/json'
           Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
 
-    # - id: transfer-repo
+    - id: transfer-repo
       name: Transfer repo
       action: http:backstage:request
       input:
