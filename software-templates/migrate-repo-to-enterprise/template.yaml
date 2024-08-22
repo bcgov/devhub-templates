@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: GitHub-Repo-Transfer
   title: Transfer a repository between organizations
-  description: Transfer a repository from the bcgov GitHub organization to the bcgov-public GitHub enterprise organization
+  description: Transfer a repository from the BCDevOps GitHub organization to the bcgov GitHub enterprise organization
 spec:
   owner: "developer-experience"
   type: service
@@ -30,26 +30,29 @@ spec:
               - github.com
             allowedOwners:
               - bcgov
-              - bcgov-public
+              - bcdevops
+              - bcgov-c
         destination:
           title: Destination GitHub Organization
           type: string
           description: GitHub organization where the repo will be transferred to.
-          default: bcgov-public
+          default: bcgov
           enum: 
-            - bcgov-public
+            - bcgov
+            - bcgov-c
           enumNames: 
-            - "bcgov-public"
+            - "bcgov"
+            - "bcgov-c"
         owner:
           title: GitHub team (required)
           type: string
-          description: The team in the bcgov-public GitHub Organization that maintains the repo.
+          description: The team in the bcgov GitHub Organization that maintains the repo.
           ui:field: OwnerPicker
           ui:options:
               allowArbitraryValues: false
               catalogFilter:
                 - kind: [ Group ]
-                  metadata.namespace: bcgov-public
+                  metadata.namespace: bcgov
 
     - title: Provide information about your product/service/component
       required:
