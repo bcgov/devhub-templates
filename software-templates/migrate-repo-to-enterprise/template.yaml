@@ -26,11 +26,25 @@ spec:
                 github:
                   - workflow
                   - read_org
-                  - repo
             allowedHosts:
               - github.com
             allowedOwners:
               - bcgov
+        repoDest:
+          title: Repository to transfer
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
+              secretsKey: USER_OAUTH_TOKEN
+              additionalScopes:
+                github:
+                  - workflow
+                  - read_org
+                  - repo
+            allowedHosts:
+              - github.com
+            allowedOwners:
               - bcdevops
         origin:
           title: Origin GitHub Organization
