@@ -266,11 +266,11 @@ spec:
       name: Create PR to add meta data
       action: publish:github:pull-request
       input:
-        repoUrl: ${{ parameters.repoToTransfer }}
+        repoUrl: ${{ parameters.repoDest }}
         title: "Add DevHub meta data"
         branchName: "DevHub-transfer-pr-branch"
         description: "This pull request will add DevHub meta data files"
-        token: ${{ secrets.USER_OAUTH_TOKEN }} 
+        token: ${{ secrets.USER_OAUTH_TOKEN_bcdevops }} 
         targetBranchName: '${{ steps["get-default-branch"].output.body.default_branch }}'
         commitMessage: "Add DevHub meta data files"
         update: true
