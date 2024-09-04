@@ -36,7 +36,7 @@ spec:
           ui:field: RepoUrlPicker
           ui:options:
             requestUserCredentials: # this is super important - it causes the user to be prompted to log in to GitHub and/or authorize the required GH scopes.
-              secretsKey: USER_OAUTH_TOKEN
+              secretsKey: USER_OAUTH_TOKEN_bcdevops
               additionalScopes:
                 github:
                   - workflow
@@ -219,7 +219,7 @@ spec:
         logRequestPath: true
         headers:
           content-type: 'application/json'
-          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN_bcdevops }}'
 
     - id: create-catalog-file
       name: Create catalog file
@@ -296,7 +296,7 @@ spec:
         logRequestPath: true
         headers:
           content-type: 'application/json'
-          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN }}'
+          Authorization: 'Bearer ${{ secrets.USER_OAUTH_TOKEN_bcdevops }}'
         body:
           new_owner: ${{ (parameters.repoToTransfer | parseRepoUrl).owner }}
           team_ids: [ '${{ steps["get-team-id"].output.body.id }}' ]
