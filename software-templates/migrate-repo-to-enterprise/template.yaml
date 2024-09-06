@@ -28,6 +28,7 @@ spec:
             allowedHosts:
               - github.com
             allowedOwners:
+              - bcgov
               - bcdevops
         targetOrg:
           title: Target GitHub Organization
