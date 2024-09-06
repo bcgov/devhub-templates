@@ -35,6 +35,16 @@ spec:
           description: GitHub organization where the repo is transfering to
           type: string
           default: bcgov
+        owner:
+          title: GitHub team (required)
+          type: string
+          description: The team in the bcgov GitHub Organization that maintains the repo.
+          ui:field: OwnerPicker
+          ui:options:
+              allowArbitraryValues: false
+              catalogFilter:
+                - kind: [ Group ]
+                  metadata.namespace: bcgov
   steps:
     - id: get-default-branch
       name: Get repo's default branch
