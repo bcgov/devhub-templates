@@ -29,6 +29,9 @@ spec:
                   - read_org
             allowedHosts:
               - github.com
+            allowedOrganizations:
+              - bcgov
+              - bcdevops
             allowedOwners:
               - bcgov
               - bcdevops
