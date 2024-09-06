@@ -13,6 +13,7 @@ spec:
       required:
         - repoToTransfer
         - targetOrg
+        - owner
       properties:
         repoToTransfer:
           title: Repository to transfer
@@ -23,6 +24,7 @@ spec:
               secretsKey: USER_OAUTH_TOKEN
               additionalScopes:
                 github:
+                  - repo
                   - workflow
                   - read_org
             allowedHosts:
