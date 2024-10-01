@@ -9,7 +9,7 @@ metadata:
         - openshift
         - community-wizard
 spec:
-    owner: "developer-experience"
+    owner: "iit-arch"
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
