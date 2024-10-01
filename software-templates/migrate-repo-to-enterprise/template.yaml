@@ -30,11 +30,9 @@ spec:
             allowedHosts:
               - github.com
             allowedOrganizations:
-              - bcgov
-              - bcdevops
+              - BCDevOps
             allowedOwners:
-              - bcgov
-              - bcdevops
+              - BCDevOps
         targetOrg:
           title: Target GitHub Organization
           description: GitHub organization where the repo is transfering to
