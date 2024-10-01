@@ -65,7 +65,7 @@ spec:
                             - kind: [ Group ]
                               metadata.namespace: bcgov
     steps:
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/oomIRL-patch-1/shared/common-yaml/catalog-info-component-action.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-action.yaml
         -   id: add-quickstart-project
             name: Add openshift quickstart project
             action: fetch:plain
