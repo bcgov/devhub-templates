@@ -65,18 +65,18 @@ spec:
     # The PR is created on the repo before the transfer because there is a timing issue if the PR is created after the transfer
     # The PR creation will fail because the transfer has not completed. So, create the PR on the repo before it is transferred
     # The PR will be moved with the repo.
-    - id: create-pr-meta-data
-      name: Create PR to add meta data
-      action: publish:github:pull-request
-      input:
-        repoUrl: ${{ parameters.repoToTransfer }}
-        title: "Add DevHub meta data"
-        branchName: "DevHub-transfer-pr-branch"
-        description: "This pull request will add DevHub meta data files"
-        token: ${{ secrets.USER_OAUTH_TOKEN }} 
-        targetBranchName: '${{ steps["get-default-branch"].output.body.default_branch }}'
-        commitMessage: "Add DevHub meta data files"
-        update: true
+    # - id: create-pr-meta-data
+    #   name: Create PR to add meta data
+    #   action: publish:github:pull-request
+    #   input:
+    #     repoUrl: ${{ parameters.repoToTransfer }}
+    #     title: "Add DevHub meta data"
+    #     branchName: "DevHub-transfer-pr-branch"
+    #     description: "This pull request will add DevHub meta data files"
+    #     token: ${{ secrets.USER_OAUTH_TOKEN }} 
+    #     targetBranchName: '${{ steps["get-default-branch"].output.body.default_branch }}'
+    #     commitMessage: "Add DevHub meta data files"
+    #     update: true
 
     # Need to get the team id because the transfer repo endpoint accepts teamid not team slug
     - id: get-team-id
