@@ -27,6 +27,7 @@ spec:
                   - repo
                   - workflow
                   - read_org
+                  - delete_repo
             allowedHosts:
               - github.com
             allowedOrganizations:
