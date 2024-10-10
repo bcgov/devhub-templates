@@ -9,7 +9,7 @@ metadata:
         - openshift
         - community-wizard
 spec:
-    owner: "iit-arch"
+    owner: "developer-experience"
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
@@ -28,12 +28,12 @@ spec:
                     default: backend-default
                     enum:
                         - backend-default
-                        - backend-go
+                        # - backend-go
                         - backend-java
                         - backend-py
                     enumNames:
                         - "JavaScript/TypeScript"
-                        - "Go with Fiber"
+                        # - "Go with Fiber"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
         -   title: Specify repository details
