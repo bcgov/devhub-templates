@@ -37,6 +37,25 @@ spec:
                         # - "Go with Fiber"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
+                oc_token:
+                    title: OC_TOKEN (Optional)
+                    type: string
+                    description: Create a repo secret for your OpenShift token
+                oc_namespace:
+                    title: OC_NAMESPACE (Optional)
+                    type: string
+                    description: Create a repo secret for your OpenShift project/namespace. For example, "abc123-dev"
+                oc_server:
+                    title: OC_SERVER (Optional)
+                    type: string
+                    description: Create a repo variable specifying your OpenShift server address
+                    default: "https://api.silver.devops.gov.bc.ca:6443"
+                    enum:
+                        - "https://api.silver.devops.gov.bc.ca:6443"
+                        - "https://api.gold.devops.gov.bc.ca:6443"
+                    enumNames:
+                        - "Silver"
+                        - "Gold"
         -   title: Specify repository details
             required:
                 - repo
@@ -79,6 +98,18 @@ spec:
             input:
                 files:
                     - backend
+        -   id: fetch-readme
+            name: Add Readme with apply user-provided values.
+            action: fetch:template
+            input:
+                url: ./skeleton
+                replace: true
+                values:
+                    name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
+                    title: ${{ parameters.title }}
+                    description: ${{ parameters.description }}
+                    destination: ${{ parameters.repo | parseRepoUrl }}
+                    lifecycle: ${{ parameters.lifecycle }}
         -   id: add-backend-plugins
             name: Add backend plugin
             if: ${{ parameters.backend != 'backend-default' }}
@@ -114,6 +145,11 @@ spec:
                 collaborators:
                     -   team: ${{ parameters.owner if parameters.owner }}
                         access: ${{ 'admin' if parameters.owner }}
+                secrets:
+                    OC_TOKEN: ${{ parameters.oc_token }}
+                    OC_NAMESPACE: ${{ parameters.oc_namespace }}
+                repoVariables:
+                    OC_SERVER: ${{ parameters.oc_server }}
     output:
         links:
             -   title: New Repository
