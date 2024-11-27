@@ -4,6 +4,8 @@ metadata:
     name: quickstart-openshift
     title: QuickStart for OpenShift
     description: Create a new repo using the OpenShift QuickStart project
+    annotations:
+        backstage.io/time-saved: P6WT
     tags:
         - quickstart
         - openshift
@@ -29,24 +31,23 @@ spec:
                     default: backend-default
                     enum:
                         - backend-default
-                        # - backend-go
                         - backend-java
                         - backend-py
                     enumNames:
                         - "JavaScript/TypeScript"
-                        # - "Go with Fiber"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
                 oc_token:
                     title: OC_TOKEN (Optional)
                     type: string
                     description: Create a repo secret for your OpenShift token
+                    ui:field: Secret
                 oc_namespace:
                     title: OC_NAMESPACE (Optional)
                     type: string
                     description: Create a repo secret for your OpenShift project/namespace. For example, "abc123-dev"
                 oc_server:
-                    title: OC_SERVER (Optional)
+                    title: OC_SERVER
                     type: string
                     description: Create a repo variable specifying your OpenShift server address
                     default: "https://api.silver.devops.gov.bc.ca:6443"
@@ -56,6 +57,17 @@ spec:
                     enumNames:
                         - "Silver"
                         - "Gold"
+        -   title: Provide Production Environment details
+            properties:
+                prod_oc_token:
+                    title: OC_TOKEN (Optional)
+                    type: string
+                    description: Create an Environment secret for your prod OpenShift token
+                    ui:field: Secret
+                prod_oc_namespace:
+                    title: OC_NAMESPACE (Optional)
+                    type: string
+                    description: Create an Environment secret for your prod OpenShift namespace. For example, "abc123-prod"
         -   title: Specify repository details
             required:
                 - repo
@@ -136,6 +148,10 @@ spec:
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
+                allowMergeCommit: false
+                allowRebaseMerge: false
+                deleteBranchOnMerge: true
+                squashMergeCommitTitle: PR_TITLE
                 gitCommitMessage: "DevHub creating new files for QuickStart for OpenShift."
                 gitAuthorName: ${{ user.entity.metadata.product_name }} # this likely won't populate properly we do some additional work on sign in to improve the default behaviour.
                 gitAuthorEmail: ${{ user.entity.spec.profile.email }} # this likely won't work  populate properly until we do some additional work on sign in to improve the default behaviour.
@@ -146,10 +162,31 @@ spec:
                     -   team: ${{ parameters.owner if parameters.owner }}
                         access: ${{ 'admin' if parameters.owner }}
                 secrets:
-                    OC_TOKEN: ${{ parameters.oc_token }}
+                    OC_TOKEN: ${{ secrets.oc_token }}
                     OC_NAMESPACE: ${{ parameters.oc_namespace }}
                 repoVariables:
                     OC_SERVER: ${{ parameters.oc_server }}
+        -   id: setup-repo-env
+            name: Create Environment
+            action: github:environment:create
+            input:
+                repoUrl: ${{ parameters.repo }}
+                name: prod
+                token: ${{ secrets.USER_OAUTH_TOKEN }}
+                secrets:
+                    OC_TOKEN: ${{ secrets.prod_oc_token }}
+                    OC_NAMESPACE: ${{ parameters.prod_oc_namespace }}
+        -   id: setup-branch-prot
+            name: Setup Branch Protection
+            action: github:branch-protection:create
+            input:
+                repoUrl: ${{ parameters.repo }}
+                token: ${{ secrets.USER_OAUTH_TOKEN }}
+                enforceAdmins: false
+                requiredStatusCheckContexts:
+                    - Analysis Results
+                    - PR Results
+                    - Validate Results
     output:
         links:
             -   title: New Repository

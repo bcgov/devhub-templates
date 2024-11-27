@@ -11,7 +11,7 @@
 [![Analysis](https://${{values.destination.host}}/${{values.destination.owner}}/${{values.destination.repo}}/actions/workflows/analysis.yml/badge.svg)](https://${{values.destination.host}}/${{values.destination.owner}}/${{values.destination.repo}}/actions/workflows/analysis.yml)
 [![Scheduled](https://${{values.destination.host}}/${{values.destination.owner}}/${{values.destination.repo}}/actions/workflows/scheduled.yml/badge.svg)](https://${{values.destination.host}}/${{values.destination.owner}}/${{values.destination.repo}}/actions/workflows/scheduled.yml)
 
-# ${{values.name}}
+# ${{values.title}}
 
 ${{values.description}}
 
