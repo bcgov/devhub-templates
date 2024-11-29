@@ -16,18 +16,17 @@ spec:
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/pubcode-parameters.yaml
-        -   title: Provide configuration details
+        -   title: Provide repository configuration details
             required:
-                # - usePostGIS
                 - backend
             properties:
-                # usePostGIS:
-                #     title: Switch to PostGIS instead of Postgres
-                #     type: boolean
-                #     ui:widget: radio
                 backend:
                     title: Select the backend stack
                     type: string
+                    description: |
+                        These are pluggable backends for use with the QuickStart for Openshift project
+
+                        For more information check the [QuickStart: Pluggable Backends ReadMe](https://github.com/bcgov/quickstart-openshift-backends?tab=readme-ov-file#quickstart-pluggable-backends)
                     default: backend-default
                     enum:
                         - backend-default
@@ -37,19 +36,13 @@ spec:
                         - "JavaScript/TypeScript"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
-                oc_token:
-                    title: OC_TOKEN (Optional)
-                    type: string
-                    description: Create a repo secret for your OpenShift token
-                    ui:field: Secret
-                oc_namespace:
-                    title: OC_NAMESPACE (Optional)
-                    type: string
-                    description: Create a repo secret for your OpenShift project/namespace. For example, "abc123-dev"
                 oc_server:
                     title: OC_SERVER
                     type: string
-                    description: Create a repo variable specifying your OpenShift server address
+                    description: |
+                        Create a repository variable specifying your OpenShift server address
+
+                        Repository secrets/variables can be changed later under `Settings > Secrets and Variables > Actions > Secrets`
                     default: "https://api.silver.devops.gov.bc.ca:6443"
                     enum:
                         - "https://api.silver.devops.gov.bc.ca:6443"
@@ -57,17 +50,40 @@ spec:
                     enumNames:
                         - "Silver"
                         - "Gold"
-        -   title: Provide Production Environment details
-            properties:
-                prod_oc_token:
+                oc_namespace:
+                    title: OC_NAMESPACE (Optional)
+                    type: string
+                    description: Create a repository secret for your OpenShift namespace. For example, "abc123-dev"
+                oc_token:
                     title: OC_TOKEN (Optional)
                     type: string
-                    description: Create an Environment secret for your prod OpenShift token
+                    description: |
+                        Create a repository secret for your OpenShift token
+
+                        Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
+                        for help finding your OpenShift pipeline token
                     ui:field: Secret
+        -   title: Provide production environment secrets
+            properties:
                 prod_oc_namespace:
                     title: OC_NAMESPACE (Optional)
                     type: string
-                    description: Create an Environment secret for your prod OpenShift namespace. For example, "abc123-prod"
+                    description: |
+                        Create an Environment secret for your prod OpenShift namespace. For example, "abc123-prod"
+
+                        Environment secrets can be changed later under `Settings > Environments > prod`
+
+                        Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#environments)
+                        for more information on GitHub Environment secrets
+                prod_oc_token:
+                    title: OC_TOKEN (Optional)
+                    type: string
+                    description: |
+                        Create an Environment secret for your prod OpenShift token
+
+                        Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
+                        for help finding your OpenShift pipeline token
+                    ui:field: Secret
         -   title: Specify repository details
             required:
                 - repo
@@ -111,7 +127,7 @@ spec:
                 files:
                     - backend
         -   id: fetch-readme
-            name: Add Readme with apply user-provided values.
+            name: Add Readme with user-provided values.
             action: fetch:template
             input:
                 url: ./skeleton
@@ -129,35 +145,27 @@ spec:
             input:
                 url: https://github.com/bcgov/quickstart-openshift-backends/tree/main/${{ parameters.backend }}
                 targetPath: 'backend'
-        # -   id: use-postgis
-        #     name: Switch the database to PostGIS
-        #     if: ${{ parameters.usePostGIS }}
-        #     action: fs:rename
-        #     input:
-        #         files:
-        #             -   from: ./database/postgis/Dockerfile
-        #                 to: ./database/Dockerfile
-        #                 overwrite: true
         -   id: publish
             name: Publish
             action: publish:github
             input:
                 allowedHosts: [ "github.com" ]
-                description: ${{ parameters.description }} # "New QuickStart for OpenShift repo"
+                description: ${{ parameters.description }}
                 repoUrl: ${{ parameters.repo }}
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
-                allowMergeCommit: false
-                allowRebaseMerge: false
-                deleteBranchOnMerge: true
-                squashMergeCommitTitle: PR_TITLE
                 gitCommitMessage: "DevHub creating new files for QuickStart for OpenShift."
                 gitAuthorName: ${{ user.entity.metadata.product_name }} # this likely won't populate properly we do some additional work on sign in to improve the default behaviour.
                 gitAuthorEmail: ${{ user.entity.spec.profile.email }} # this likely won't work  populate properly until we do some additional work on sign in to improve the default behaviour.
                 hasProjects: false
                 hasWiki: false
                 topics: [ "devhub", "openshift" ]
+                allowMergeCommit: false # these are quickstart-openshift config recommendations
+                allowRebaseMerge: false
+                deleteBranchOnMerge: true
+                squashMergeCommitTitle: PR_TITLE
+                # squashMergeCommitMessage?: 'PR_BODY' | 'COMMIT_MESSAGES' | 'BLANK';
                 collaborators:
                     -   team: ${{ parameters.owner if parameters.owner }}
                         access: ${{ 'admin' if parameters.owner }}
@@ -199,9 +207,10 @@ spec:
                     ## Here are the next steps you can take:
 
                     * check out the contents of [your new repo](${{ steps.publish.output.remoteUrl }})
-                    * check out [the QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift)
+                    * check out [the QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#quickstart-for-openshift)
 
                     This project is provided by NRIDS Architecture and Forestry Digital Services, courtesy of the Government of British Columbia.
 
+                    **Additional Resources**
                     * NRID's [Kickstarter Guide](https://bcgov.github.io/nr-architecture-patterns-library/docs/Agile%20Team%20Kickstarter) (via. Confluence, links may be internal)
                     * [OpenShift Backends for Go, Java and Python](https://github.com/bcgov/quickstart-openshift-backends)
