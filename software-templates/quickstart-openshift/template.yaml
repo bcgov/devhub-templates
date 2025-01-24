@@ -3,19 +3,21 @@ kind: Template
 metadata:
     name: quickstart-openshift
     title: QuickStart for OpenShift
-    description: Create a new repo using the OpenShift QuickStart project
+    description: |
+        Create a new repo using the QuickStart for OpenShift project  
+
+        [Project documentation](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#quickstart-for-openshift)
     annotations:
         backstage.io/time-saved: P6WT
     tags:
         - quickstart
         - openshift
-        - community-wizard
 spec:
     owner: "developer-experience"
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/pubcode-parameters.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/DEVX1481-quickstart-openshift/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
         -   title: Provide repository configuration details
             required:
                 - backend
@@ -58,7 +60,28 @@ spec:
                     title: OC_TOKEN (Optional)
                     type: string
                     description: |
-                        Create a repository secret for your OpenShift token
+                        Create a repository secret for your OpenShift pipeline token
+
+                        Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
+                        for help finding your OpenShift pipeline token
+                    ui:field: Secret
+        -   title: Provide test environment secrets
+            properties:
+                test_oc_namespace:
+                    title: OC_NAMESPACE (Optional)
+                    type: string
+                    description: |
+                        Create an Environment secret for your test OpenShift namespace. For example, "abc123-test"
+
+                        Environment secrets can be changed later under `Settings > Environments > test`
+
+                        Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#environments)
+                        for more information on GitHub Environment secrets
+                test_oc_token:
+                    title: OC_TOKEN (Optional)
+                    type: string
+                    description: |
+                        Create an Environment secret for your test OpenShift pipeline token
 
                         Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
                         for help finding your OpenShift pipeline token
@@ -79,7 +102,7 @@ spec:
                     title: OC_TOKEN (Optional)
                     type: string
                     description: |
-                        Create an Environment secret for your prod OpenShift token
+                        Create an Environment secret for your prod OpenShift pipeline token
 
                         Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
                         for help finding your OpenShift pipeline token
@@ -113,7 +136,7 @@ spec:
                             - kind: [ Group ]
                               metadata.namespace: bcgov
     steps:
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-action.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/tree/DEVX1481-quickstart-openshift/shared/common-yaml/catalog-info-component-action.yaml
         -   id: add-quickstart-project
             name: Add openshift quickstart project
             action: fetch:plain
@@ -174,8 +197,18 @@ spec:
                     OC_NAMESPACE: ${{ parameters.oc_namespace }}
                 repoVariables:
                     OC_SERVER: ${{ parameters.oc_server }}
-        -   id: setup-repo-env
-            name: Create Environment
+        -   id: setup-test-env
+            name: Create test Environment
+            action: github:environment:create
+            input:
+                repoUrl: ${{ parameters.repo }}
+                name: test
+                token: ${{ secrets.USER_OAUTH_TOKEN }}
+                secrets:
+                    OC_TOKEN: ${{ secrets.test_oc_token }}
+                    OC_NAMESPACE: ${{ parameters.test_oc_namespace }}
+        -   id: setup-prod-env
+            name: Create prod Environment
             action: github:environment:create
             input:
                 repoUrl: ${{ parameters.repo }}
