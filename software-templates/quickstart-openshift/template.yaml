@@ -224,6 +224,7 @@ spec:
                 repoUrl: ${{ parameters.repo }}
                 token: ${{ secrets.USER_OAUTH_TOKEN }}
                 enforceAdmins: false
+                requiredConversationResolution: true
                 requiredStatusCheckContexts:
                     - Analysis Results
                     - PR Results
