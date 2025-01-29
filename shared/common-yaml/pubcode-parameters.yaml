@@ -1,10 +1,8 @@
 # BCGov pubcode fields https://github.com/bcgov/pubcode
 title: Provide information about your product/service/component
-required:
-  - ministry
 properties:
   ministry:
-    title: Ministry
+    title: Ministry (optional)
     type: string
     description: Name of the ministry associated with the product.
     enum:
