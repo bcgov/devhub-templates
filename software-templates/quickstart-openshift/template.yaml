@@ -188,7 +188,7 @@ spec:
                 allowRebaseMerge: false
                 deleteBranchOnMerge: true
                 squashMergeCommitTitle: PR_TITLE
-                # squashMergeCommitMessage?: 'PR_BODY' | 'COMMIT_MESSAGES' | 'BLANK';
+                squashMergeCommitMessage: COMMIT_MESSAGES
                 collaborators:
                     -   team: ${{ parameters.owner if parameters.owner }}
                         access: ${{ 'admin' if parameters.owner }}
