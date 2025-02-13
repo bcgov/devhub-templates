@@ -6,18 +6,18 @@ metadata:
     description: |
         Create a new repo using the QuickStart for OpenShift project  
 
-        [Project documentation](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#quickstart-for-openshift)
+        [NRID's Project documentation](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#quickstart-for-openshift)
     annotations:
         backstage.io/time-saved: P6WT
     tags:
-        - quickstart
+        - quickstarts
         - openshift
 spec:
     owner: "developer-experience"
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/DEVX1481-quickstart-openshift/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
         -   title: Provide repository configuration details
             required:
                 - backend
@@ -28,16 +28,20 @@ spec:
                     description: |
                         These are pluggable backends for use with the QuickStart for Openshift project
 
+                        **This selection is an alternative backend example**
+
                         For more information check the [QuickStart: Pluggable Backends ReadMe](https://github.com/bcgov/quickstart-openshift-backends?tab=readme-ov-file#quickstart-pluggable-backends)
                     default: backend-default
                     enum:
                         - backend-default
                         - backend-java
                         - backend-py
+                        - backend-go
                     enumNames:
                         - "JavaScript/TypeScript"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
+                        - "Go"
                 oc_server:
                     title: OC_SERVER
                     type: string
@@ -65,6 +69,20 @@ spec:
                         Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
                         for help finding your OpenShift pipeline token
                     ui:field: Secret
+            dependencies:
+                backend:
+                    allOf:
+                        -   if:
+                                properties:
+                                    backend:
+                                        const: backend-default
+                            then:
+                                properties:
+                                    backend:
+                                        description: |
+                                            These are pluggable backends for use with the QuickStart for Openshift project
+
+                                            For more information check the [QuickStart: Pluggable Backends ReadMe](https://github.com/bcgov/quickstart-openshift-backends?tab=readme-ov-file#quickstart-pluggable-backends)
         -   title: Provide test environment secrets
             properties:
                 test_oc_namespace:
@@ -110,6 +128,7 @@ spec:
         -   title: Specify repository details
             required:
                 - repo
+                - confirm
             properties:
                 repo:
                     title: Name of the new QuickStart for OpenShift repository that we will create
@@ -135,22 +154,34 @@ spec:
                         catalogFilter:
                             - kind: [ Group ]
                               metadata.namespace: bcgov
+                confirm:
+                    title: Create a new repository in the bcgov organization
+                    type: boolean
+                    description: Please confirm the creation of a new repository in the bcgov organization.
+                    const: true
     steps:
-        -   $yaml: https://github.com/bcgov/devhub-templates/tree/DEVX1481-quickstart-openshift/shared/common-yaml/catalog-info-component-action.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-action.yaml
         -   id: add-quickstart-project
-            name: Add openshift quickstart project
+            name: Add quickstart-openshift project
             action: fetch:plain
             input:
                 url: https://github.com/bcgov/quickstart-openshift/tree/main
-        -   id: rm-default-backend
+        -   id: rm-default-backend # fetch:plain w/ replace will leave files from the default backend behind
             name: remove default backend
             if: ${{ parameters.backend != 'backend-default' }}
             action: fs:delete
             input:
                 files:
                     - backend
+        -   id: add-backend-plugins
+            name: Add backend plugin
+            if: ${{ parameters.backend != 'backend-default' }}
+            action: fetch:plain
+            input:
+                url: https://github.com/bcgov/quickstart-openshift-backends/tree/main/${{ parameters.backend }}
+                targetPath: 'backend'
         -   id: fetch-readme
-            name: Add Readme with user-provided values.
+            name: Create Readme with user-provided values.
             action: fetch:template
             input:
                 url: ./skeleton
@@ -161,13 +192,27 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repo | parseRepoUrl }}
                     lifecycle: ${{ parameters.lifecycle }}
-        -   id: add-backend-plugins
-            name: Add backend plugin
-            if: ${{ parameters.backend != 'backend-default' }}
-            action: fetch:plain
+        -   id: switch-to-gold # switch out cluster references. using template strings here would break workflows/charts in the quickstart-openshift repo
+            name: Switch workflows/charts to gold cluster
+            if: ${{ parameters.oc_server == 'https://api.gold.devops.gov.bc.ca:6443' }}
+            action: roadiehq:utils:fs:replace
             input:
-                url: https://github.com/bcgov/quickstart-openshift-backends/tree/main/${{ parameters.backend }}
-                targetPath: 'backend'
+                files:
+                    -   file: './.github/workflows/.tests.yml'
+                        find: 'apps.silver.devops.gov.bc.ca'
+                        replaceWith: 'apps.gold.devops.gov.bc.ca'
+                    -   file: './.github/workflows/demo.yml'
+                        find: 'apps.silver.devops.gov.bc.ca'
+                        replaceWith: 'apps.gold.devops.gov.bc.ca'
+                    -   file: './.github/workflows/pr-validate.yml'
+                        find: 'apps.silver.devops.gov.bc.ca'
+                        replaceWith: 'apps.gold.devops.gov.bc.ca'
+                    -   file: './.github/workflows/scheduled.yml'
+                        find: 'apps.silver.devops.gov.bc.ca'
+                        replaceWith: 'apps.gold.devops.gov.bc.ca'
+                    -   file: './charts/app/values.yaml'
+                        find: '"apps.silver.devops.gov.bc.ca"'
+                        replaceWith: '"apps.gold.devops.gov.bc.ca"'
         -   id: publish
             name: Publish
             action: publish:github
@@ -225,7 +270,7 @@ spec:
                 token: ${{ secrets.USER_OAUTH_TOKEN }}
                 enforceAdmins: false
                 requiredConversationResolution: true
-                requiredStatusCheckContexts:
+                requiredStatusCheckContexts: #  these are quickstart-openshift default set
                     - Analysis Results
                     - PR Results
                     - Validate Results
