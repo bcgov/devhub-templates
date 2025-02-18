@@ -16,8 +16,8 @@ spec:
     owner: "developer-experience"
     type: service
     parameters:
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/quickstart-openshift-tmp/shared/common-yaml/catalog-info-component-parameters.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/quickstart-openshift-tmp/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
         -   title: Provide repository configuration details
             required:
                 - backend
@@ -160,7 +160,7 @@ spec:
                     description: Please confirm the creation of a new repository in the bcgov organization.
                     const: true
     steps:
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-action.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/quickstart-openshift-tmp/shared/common-yaml/catalog-info-component-action.yaml
         -   id: add-quickstart-project
             name: Add quickstart-openshift project
             action: fetch:plain
