@@ -192,27 +192,27 @@ spec:
                     description: ${{ parameters.description }}
                     destination: ${{ parameters.repo | parseRepoUrl }}
                     lifecycle: ${{ parameters.lifecycle }}
-        -   id: switch-to-gold # switch out cluster references. using template strings here would break workflows/charts in the quickstart-openshift repo
-            name: Switch workflows/charts to gold cluster
-            if: ${{ parameters.oc_server == 'https://api.gold.devops.gov.bc.ca:6443' }}
-            action: roadiehq:utils:fs:replace
-            input:
-                files:
-                    -   file: './.github/workflows/.tests.yml'
-                        find: 'apps.silver.devops.gov.bc.ca'
-                        replaceWith: 'apps.gold.devops.gov.bc.ca'
-                    -   file: './.github/workflows/demo.yml'
-                        find: 'apps.silver.devops.gov.bc.ca'
-                        replaceWith: 'apps.gold.devops.gov.bc.ca'
-                    -   file: './.github/workflows/pr-validate.yml'
-                        find: 'apps.silver.devops.gov.bc.ca'
-                        replaceWith: 'apps.gold.devops.gov.bc.ca'
-                    -   file: './.github/workflows/scheduled.yml'
-                        find: 'apps.silver.devops.gov.bc.ca'
-                        replaceWith: 'apps.gold.devops.gov.bc.ca'
-                    -   file: './charts/app/values.yaml'
-                        find: '"apps.silver.devops.gov.bc.ca"'
-                        replaceWith: '"apps.gold.devops.gov.bc.ca"'
+        # -   id: switch-to-gold # switch out cluster references. using template strings here would break workflows/charts in the quickstart-openshift repo
+        #     name: Switch workflows/charts to gold cluster
+        #     if: ${{ parameters.oc_server == 'https://api.gold.devops.gov.bc.ca:6443' }}
+        #     action: roadiehq:utils:fs:replace
+        #     input:
+        #         files:
+        #             -   file: './.github/workflows/.tests.yml'
+        #                 find: 'apps.silver.devops.gov.bc.ca'
+        #                 replaceWith: 'apps.gold.devops.gov.bc.ca'
+        #             -   file: './.github/workflows/demo.yml'
+        #                 find: 'apps.silver.devops.gov.bc.ca'
+        #                 replaceWith: 'apps.gold.devops.gov.bc.ca'
+        #             -   file: './.github/workflows/pr-validate.yml'
+        #                 find: 'apps.silver.devops.gov.bc.ca'
+        #                 replaceWith: 'apps.gold.devops.gov.bc.ca'
+        #             -   file: './.github/workflows/scheduled.yml'
+        #                 find: 'apps.silver.devops.gov.bc.ca'
+        #                 replaceWith: 'apps.gold.devops.gov.bc.ca'
+        #             -   file: './charts/app/values.yaml'
+        #                 find: '"apps.silver.devops.gov.bc.ca"'
+        #                 replaceWith: '"apps.gold.devops.gov.bc.ca"'
         -   id: publish
             name: Publish
             action: publish:github
