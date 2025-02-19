@@ -128,6 +128,7 @@ spec:
         -   title: Specify repository details
             required:
                 - repo
+                - owner
                 - confirm
             properties:
                 repo:
@@ -155,9 +156,9 @@ spec:
                             - kind: [ Group ]
                               metadata.namespace: bcgov
                 confirm:
-                    title: Create a new repository in the bcgov organization
+                    title: I confirm that I want to create a new repository.
                     type: boolean
-                    description: Please confirm the creation of a new repository in the bcgov organization.
+                    description: Completing the Wizard will create a new repository in the bcgov GitHub organization. Please only continue if this is your intent.
                     const: true
     steps:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-action.yaml
