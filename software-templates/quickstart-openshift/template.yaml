@@ -7,6 +7,8 @@ metadata:
         Create a new repo using the QuickStart for OpenShift project  
 
         [NRID's Project documentation](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#quickstart-for-openshift)
+
+        Request support on [Jira Service Manager](https://citz-do.atlassian.net/servicedesk/customer/portal/2)
     annotations:
         backstage.io/time-saved: P6WT
     tags:
