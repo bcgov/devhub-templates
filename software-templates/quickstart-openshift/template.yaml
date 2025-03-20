@@ -19,7 +19,7 @@ spec:
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/pubcode-parameters.yaml
         -   title: Provide repository configuration details
             required:
                 - backend

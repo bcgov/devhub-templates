@@ -6,7 +6,7 @@
 # - owner - The GitHub team that owns the above repo. 
 #
 # This action uses the parameters supplied from the catalog-info-component-parameters.yaml 
-# and pubcode-parameters.yaml files. If those files are not used your template must 
+# pubcode-parameters.yaml and pubcode-parameters-platform.yaml files. If those files are not used your template must 
 # supply the expected parameters.
 id: create-catalog-file
 name: Create catalog file

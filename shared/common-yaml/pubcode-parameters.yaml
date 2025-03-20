@@ -1,8 +1,10 @@
 # BCGov pubcode fields https://github.com/bcgov/pubcode
 title: Provide information about your product/service/component
+required:
+  - ministry
 properties:
   ministry:
-    title: Ministry (optional)
+    title: Ministry
     type: string
     description: Name of the ministry associated with the product.
     enum:
@@ -65,28 +67,3 @@ properties:
     title: Product owner (optional)
     type: string
     description: Name of the individual in the Product Owner role for the product.
-  hosting_platform:
-    title: Hosting platform (optional)
-    type: string
-    description: Name of the technical platform where the product is hosted.
-    default: Private-Cloud-Openshift
-    enum:
-      - Amazon-Web-Services
-      - Google-Cloud-Platform
-      - Microsoft-Azure
-      - On-Premise-Physical
-      - On-Premise-Virtual
-      - Private-Cloud-Openshift
-      - Other
-      - Unknown
-      - Not-Applicable
-    enumNames:
-      - 'Amazon Web Service'
-      - 'Google Cloud Platform'
-      - 'Microsoft Azure'
-      - 'On-premise virtual infrastructure'
-      - 'On-premise physical infrastructure'
-      - 'OpenShift private cloud'
-      - "Other platform that isn't listed"
-      - "Not sure"
-      - "Not applicable"
