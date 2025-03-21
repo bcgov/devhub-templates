@@ -19,12 +19,12 @@ spec:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/license-parameters.yaml
         -   title: Specify repository details
             required:
-                - repoUrl
+                - repo
                 - targetBranchName
                 - docsPath
                 - owner
             properties:
-                repoUrl:
+                repo:
                     title: Specify details for creating a new repository or a pull request to an existing repo
                     type: string
                     ui:field: RepoUrlPicker
@@ -69,8 +69,8 @@ spec:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
-                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
+                    destination: ${{ parameters.repo | parseRepoUrl }}
+                    repo_url: ${{ parameters.repo | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     product_name: ${{ parameters.product_name }}
@@ -125,7 +125,7 @@ spec:
             name: Publish
             action: publish:github:pull-request
             input:
-                repoUrl: ${{ parameters.repoUrl }}
+                repoUrl: ${{ parameters.repo }}
                 title: "DevHub publishing pull request"
                 branchName: "DevHub-publishing-pr-branch"
                 description: "This pull request will add the files required to publish documentation on DevHub"

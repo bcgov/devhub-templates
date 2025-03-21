@@ -19,10 +19,10 @@ spec:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/license-parameters.yaml
         -   title: Specify repository details
             required:
-                - repoUrl
+                - repo
                 - owner
             properties:
-                repoUrl:
+                repo:
                     title: Name of the repository that we will create to store your documentation
                     type: string
                     ui:field: RepoUrlPicker
@@ -56,8 +56,8 @@ spec:
                     name: ${{ parameters.title | lower | replace(" ", "-") | replace("'", "") }}
                     title: ${{ parameters.title }}
                     description: ${{ parameters.description }}
-                    destination: ${{ parameters.repoUrl | parseRepoUrl }}
-                    repo_url: ${{ parameters.repoUrl | parseRepoUrl }}
+                    destination: ${{ parameters.repo | parseRepoUrl }}
+                    repo_url: ${{ parameters.repo | parseRepoUrl }}
                     owner: ${{ parameters.owner }}
                     ministry: ${{ parameters.ministry }}
                     product_name: ${{ parameters.product_name }}
@@ -82,8 +82,8 @@ spec:
             action: publish:github
             input:
                 allowedHosts: [ "github.com" ]
-                description: This is ${{ parameters.name }}
-                repoUrl: ${{ parameters.repoUrl }}
+                description: ${{ parameters.description }}
+                repoUrl: ${{ parameters.repo }}
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
                 repoVisibility: "public"
                 defaultBranch: "main"
