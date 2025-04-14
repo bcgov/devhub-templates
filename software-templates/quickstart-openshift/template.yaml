@@ -19,7 +19,7 @@ spec:
     type: service
     parameters:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
-        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/software-templates/quickstart-openshift/custom-yaml/pubcode-parameters-noplatform.yaml
+        -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/pubcode-parameters.yaml
         -   title: Provide repository configuration details
             required:
                 - backend
@@ -148,9 +148,9 @@ spec:
                         allowedOwners:
                             - bcgov
                 owner:
-                    title: GitHub team (optional)
+                    title: GitHub team
                     type: string
-                    description: The GitHub team that is developing the project, if there is one.
+                    description: The GitHub team that is developing the project.
                     ui:field: OwnerPicker
                     ui:options:
                         allowArbitraryValues: false
