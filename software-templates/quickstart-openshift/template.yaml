@@ -156,7 +156,6 @@ spec:
                         allowArbitraryValues: false
                         catalogFilter:
                             - kind: [ Group ]
-                              metadata.namespace: bcgov
                 confirm:
                     title: I confirm that I want to create a new repository.
                     type: boolean

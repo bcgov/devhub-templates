@@ -45,7 +45,6 @@ spec:
                         allowArbitraryValues: false
                         catalogFilter:
                             - kind: [ Group ]
-                              metadata.namespace: bcgov
     steps:
         -   id: fetch-base
             name: Add files from skeleton and apply user-provided values.
