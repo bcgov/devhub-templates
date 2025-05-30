@@ -1,5 +1,6 @@
 name: Build TechDocs with DevHub TechDocs Publish Action
-
+permissions:
+    contents: read
 on:
     workflow_dispatch:
     push:
@@ -17,8 +18,6 @@ on:
 
 jobs:
     test_techdocs_build_job:
-        permissions:
-            contents: read
         runs-on: ubuntu-latest
 
         name: A job to build and publish techdocs content
