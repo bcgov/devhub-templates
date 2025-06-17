@@ -38,12 +38,10 @@ spec:
                         - backend-default
                         - backend-java
                         - backend-py
-                        - backend-go
                     enumNames:
                         - "JavaScript/TypeScript"
                         - "Java with Quarkus, Cloud Native"
                         - "Python with FastAPI"
-                        - "Go"
                 oc_server:
                     title: OC_SERVER
                     type: string
@@ -244,6 +242,17 @@ spec:
                     OC_NAMESPACE: ${{ parameters.oc_namespace }}
                 repoVariables:
                     OC_SERVER: ${{ parameters.oc_server }}
+        -   id: snowplow
+            name: Create Snowplow event
+            action: bcgov:snowplow:create
+            input:
+                name: quickstart-openshift
+                ministry: ${{ parameters.ministry }}
+                options:
+                    -   ${{ parameters.backend }}
+                    -   ${{ parameters.oc_server }}
+                platform: OpenShift private cloud
+                timeSaved: 60480 # backstage.io/time-saved in minutes
         -   id: setup-test-env
             name: Create test Environment
             action: github:environment:create
