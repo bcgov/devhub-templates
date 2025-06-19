@@ -27,7 +27,7 @@ input:
         bcgovpubcode.gov.bc.ca/product_description: ${{ parameters.description }}
         bcgovpubcode.gov.bc.ca/product_acronym: ${{ parameters.product_acronym }}
         bcgovpubcode.gov.bc.ca/product_owner: ${{ parameters.product_owner }}
-        bcgovpubcode.gov.bc.ca/hosting_platform: ${{ parameters.hosting_platform | default("OpenShift private cloud", true) }}
+        bcgovpubcode.gov.bc.ca/hosting_platform: ${{ parameters.hosting_platform | default("Private-Cloud-Openshift", true) }}
     spec:
         type: ${{ parameters.type }}  
         lifecycle: ${{ parameters.lifecycle }}  

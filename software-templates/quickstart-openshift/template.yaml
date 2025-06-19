@@ -251,8 +251,8 @@ spec:
                 options:
                     -   ${{ parameters.backend }}
                     -   ${{ parameters.oc_server }}
-                platform: OpenShift private cloud
-                timeSaved: 60480 # backstage.io/time-saved in minutes
+                platform: Private-Cloud-Openshift
+                timeSaved: 14400 # 6w at 40hr/w - backstage.io/time-saved in minutes
         -   id: setup-test-env
             name: Create test Environment
             action: github:environment:create
