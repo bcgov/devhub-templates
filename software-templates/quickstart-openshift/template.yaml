@@ -219,7 +219,6 @@ spec:
             name: Publish
             action: publish:github
             input:
-                allowedHosts: [ "github.com" ]
                 description: ${{ parameters.description }}
                 repoUrl: ${{ parameters.repo }}
                 token: ${{ secrets.USER_OAUTH_TOKEN }} # this causes the GitHub publish to be performed as the logged-in user and reduces the required permissions of the app itself.
