@@ -21,7 +21,27 @@ spec:
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/catalog-info-component-parameters.yaml
         -   $yaml: https://github.com/bcgov/devhub-templates/blob/main/shared/common-yaml/pubcode-parameters.yaml
         -   title: Provide repository configuration details
+            required:
+                - backend
             properties:
+                backend:
+                    title: Select the backend stack
+                    type: string
+                    description: |
+                        These are pluggable backends for use with the QuickStart for Openshift project
+
+                        **This selection is an alternative backend example**
+
+                        For more information check the [QuickStart: Pluggable Modules ReadMe](https://github.com/bcgov/quickstart-openshift-modules?tab=readme-ov-file#quickstart-pluggable-backends)
+                    default: backend-default
+                    enum:
+                        - backend-default
+                        - backend-java
+                        - backend-py
+                    enumNames:
+                        - "JavaScript/TypeScript"
+                        - "Java with Quarkus, Cloud Native"
+                        - "Python with FastAPI"
                 oc_server:
                     title: OC_SERVER
                     type: string
@@ -49,6 +69,20 @@ spec:
                         Refer to the [QuickStart for OpenShift ReadMe](https://github.com/bcgov/quickstart-openshift?tab=readme-ov-file#secrets-values)
                         for help finding your OpenShift pipeline token
                     ui:field: Secret
+            dependencies:
+                backend:
+                    allOf:
+                        -   if:
+                                properties:
+                                    backend:
+                                        const: backend-default
+                            then:
+                                properties:
+                                    backend:
+                                        description: |
+                                            These are pluggable backends for use with the QuickStart for Openshift project
+
+                                            For more information check the [QuickStart: Pluggable Modules ReadMe](https://github.com/bcgov/quickstart-openshift-modules?tab=readme-ov-file#quickstart-pluggable-backends)
         -   title: Provide test environment secrets
             properties:
                 test_oc_namespace:
@@ -132,6 +166,20 @@ spec:
             action: fetch:plain
             input:
                 url: https://github.com/bcgov/quickstart-openshift/tree/main
+        -   id: rm-default-backend # fetch:plain w/ replace will leave files from the default backend behind
+            name: remove default backend
+            if: ${{ parameters.backend != 'backend-default' }}
+            action: fs:delete
+            input:
+                files:
+                    - backend
+        -   id: add-backend-plugins
+            name: Add backend plugin
+            if: ${{ parameters.backend != 'backend-default' }}
+            action: fetch:plain
+            input:
+                url: https://github.com/bcgov/quickstart-openshift-modules/tree/main/${{ parameters.backend }}
+                targetPath: 'backend'
         -   id: fetch-readme
             name: Create Readme with user-provided values.
             action: fetch:template
@@ -200,7 +248,7 @@ spec:
                 name: quickstart-openshift
                 ministry: ${{ parameters.ministry }}
                 options:
-                    -   backend-default
+                    -   ${{ parameters.backend }}
                     -   ${{ parameters.oc_server }}
                 platform: Private-Cloud-Openshift
                 timeSaved: 14400 # 6w at 40hr/w - backstage.io/time-saved in minutes
@@ -254,3 +302,4 @@ spec:
 
                     **Additional Resources**
                     * NRID's [Kickstarter Guide](https://bcgov.github.io/nr-architecture-patterns-library/docs/Agile%20Team%20Kickstarter) (via. Confluence, links may be internal)
+                    * [OpenShift Modules for Java and Python](https://github.com/bcgov/quickstart-openshift-modules)
